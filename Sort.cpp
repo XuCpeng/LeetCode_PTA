@@ -1,8 +1,16 @@
+//
+// Created by xcp on 18-11-1.
+//
 #include <iostream>
-#define MaxSize 100001
 typedef int ElemType;
 
-int Partition(int a[],int l,int h){
+//---------------QuickSort----------------------
+int Partition(ElemType a[],int l,int h){
+
+    //随机取枢值
+    int ri= l+rand()%(h-l+1);
+    std::swap(a[l],a[ri]);
+
     int p=a[l];
     while (l<h){
         while (l<h&&a[h]>=p){
@@ -26,6 +34,7 @@ void QuickSort(ElemType a[],int l,int h){
     }
 }
 
+//-----------------InsertSort----------------
 //a[0] not use
 void InsterSort(ElemType a[],int n){
     int j;
@@ -47,7 +56,7 @@ void InsterSortHalf(ElemType a[],int n){
         if(a[i]<a[i-1]){
             a[0]=a[i];
             low=1;hight=i-1;
-            while(low<hight){
+            while(low<=hight){
                 mid=(low+hight)/2;
                 if(a[mid]>a[0]){
                     hight=mid-1;
@@ -65,6 +74,8 @@ void InsterSortHalf(ElemType a[],int n){
     }
 
 }
+
+//--------------------ShellSort--------------------
 //a[0] not use
 void ShellInsertSort(ElemType a[],int n,int span){
     for (int i = n/span; i >=1; i=i/span) {
@@ -81,17 +92,108 @@ void ShellInsertSort(ElemType a[],int n,int span){
     }
 }
 
+
+//----------------BubbeSort-------------------
+void BubbleSort(ElemType a[],int n){
+    int l=1,h=n;
+    bool flag= true;
+    while (l<h&&flag){
+        flag= false;
+        for (int i = l; i <h ; ++i) {
+            if(a[i]>a[i+1]){
+                std::swap(a[i],a[i+1]);
+                flag= true;
+            }
+        }
+
+        --h;
+
+        for (int j = h; j > l ; --j) {
+            if(a[j]<a[j-1]){
+                std::swap(a[j],a[j-1]);
+                flag= true;
+            }
+        }
+
+        ++l;
+    }
+
+}
+
+//------------------SimpleSelect------------------
+
+void SimpleSelect(ElemType a[],int n){
+    int min;
+    //a[0] not use
+    for (int i = 1; i <n ; ++i) {
+        min=i;
+        for (int j = i+1; j <=n ; ++j) {
+            if(a[j]<a[min]){
+                min=j;
+            }
+        }
+        if(i!=min)
+            std::swap(a[min],a[i]);
+    }
+}
+
+//--------------MergeSort-----------------------
+int b[100001];
+void Merge(ElemType a[],int l,int h,int mid){
+
+    for (int i = l; i <= h; ++i) {
+        b[i]=a[i];
+    }
+
+    int p,q,k;
+    for ( p = l,q=mid+1,k=l;p<=mid&&q<=h; ++k) {
+        if(b[p]<b[q]){
+            a[k]=b[p++];
+        } else{
+            a[k]=b[q++];
+        }
+    }
+    while(p<=mid){
+        a[k++]=b[p++];
+    }
+    while (q<=h){
+        a[k++]=b[q++];
+    }
+
+}
+
+void MergeSort(ElemType a[],int l,int h){
+    if(l<h){
+        int mid=(l+h)/2;
+        MergeSort(a,l,mid);
+        MergeSort(a,mid+1,h);
+        Merge(a,l,h,mid);
+    }
+
+}
+
+
 int main() {
-    int a[MaxSize];
+
+    int a[100001];
     int  n;
     std::cin>>n;
     for (int i = 1; i <= n; ++i) {
-        std::cin>>a[i];
+        std::cin >> a[i];
     }
+
+    //a[0] not use
+//    int a[]={0,4,981,10,-17,0,-20,29,50,8,43,-5};
+//    int  n=11;
+
     //InsterSort(a,n);
-    ShellInsertSort(a,n,2);
+    //ShellInsertSort(a,n,2);
     //InsterSortHalf(a,n);
     //QuickSort(a,1,n);
+    //SimpleSelect(a,n);
+    //BubbleSort(a,n);
+    MergeSort(a,1,n);
+
     std::cout<<a[1];
     for (int j = 2; j <=n; ++j) {
         std::cout<<" "<<a[j];
