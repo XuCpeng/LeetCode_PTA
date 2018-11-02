@@ -38,7 +38,7 @@ void QuickSort(ElemType a[],int l,int h){
 //a[0] not use
 void InsterSort(ElemType a[],int n){
     int j;
-    for (int i = 1; i <= n; ++i) {
+    for (int i = 2; i <= n; ++i) {
         if(a[i]<a[i-1]){
             a[0]=a[i];
             for (j = i-1;a[j]>a[0]; --j) {
@@ -147,10 +147,10 @@ void Merge(ElemType a[],int l,int h,int mid){
 
     int p,q,k;
     for ( p = l,q=mid+1,k=l;p<=mid&&q<=h; ++k) {
-        if(b[p]<b[q]){
-            a[k]=b[p++];
-        } else{
+        if(b[p]>b[q]){
             a[k]=b[q++];
+        } else{
+            a[k]=b[p++];
         }
     }
     while(p<=mid){
