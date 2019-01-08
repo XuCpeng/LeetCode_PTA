@@ -4,7 +4,7 @@
 
 **为PTA刷题而创建，若有一些简短的算法也会放进来**
 
-- Sort.cpp  综合了快排、直接插入、简单选择、希尔排序、归并排序、冒泡排序
+- Sort.cpp  综合了【堆排序、快排、直接插入、简单选择、希尔排序、归并排序、冒泡排序】
 - BiTreeHight.cpp  求二叉树高度
 - BiTreeOrder.cpp   二叉树遍历
 - DoubleStack.cpp  双向栈
