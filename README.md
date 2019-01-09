@@ -16,6 +16,7 @@
 - LinkListLength.cpp  求链表长度
 - LinkListOP.cpp  链表操作集
 - LinkedStack.cpp  链栈
+- SequentialStack.cpp  顺序栈
 - MergeList.cpp  非递减链表合并
 - CircularQueue.cpp  数组实现顺序队列
 - LinkedQueue.cpp  链队列
