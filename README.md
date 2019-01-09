@@ -17,6 +17,7 @@
 - LinkListOP.cpp 链表操作集
 - MergeList.cpp  非递减链表合并
 - CircularQueue.cpp  数组实现顺序队列
+- LinkedQueue.cpp  链队列
 - MidInt.cpp 查找两个非降序顺序表的中位数
 - PTT.cpp  极其简单的多项式求积、和
 - Reverse.cpp  
