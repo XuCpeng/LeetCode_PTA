@@ -27,3 +27,4 @@
 - SemilarSearchTree.cpp  判断两个数列对应的二叉搜索树是否相同
 - SemilarTree.cpp  判断两棵树是否同构
 - SqListOP.cpp   顺序表操作集
+- splitIntoFibonacci.py 将数组拆分成斐波那契序列
