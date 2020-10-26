@@ -19,7 +19,7 @@ public:
             return 0;
         }
 
-        std::queue<TreeNode *> q;
+        std::queue<TreeNode *> q;                 
         q.push(root);
         TreeNode *b = root;
         TreeNode *p = root;
