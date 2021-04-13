@@ -491,20 +491,20 @@ public class Solution {
     }
 
     public boolean hasCycle(ListNode head) {
-        if(head==null||head.next==null)
+        if (head == null || head.next == null)
             return false;
-        if(head.next==head)
+        if (head.next == head)
             return true;
-        ListNode p=head.next;
-        head.next=head;
+        ListNode p = head.next;
+        head.next = head;
         ListNode q;
-        while(p.next!=null){
-            if(p.next.next==head)
+        while (p.next != null) {
+            if (p.next.next == head)
                 return true;
-            else{
-                q=p.next;
-                p.next=head;
-                p=q;
+            else {
+                q = p.next;
+                p.next = head;
+                p = q;
             }
         }
         return false;
