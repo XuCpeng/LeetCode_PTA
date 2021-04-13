@@ -3,3 +3,4 @@ CppCodeSpace/.vscode/
 JavaCodeSpace/out
 JavaCodeSpace/out
 */**/*.exe
+JavaCodeSpace/.idea/sonarlint
