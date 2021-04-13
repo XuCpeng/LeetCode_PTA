@@ -1,0 +1,29 @@
+
+=
+java:S1659à"Declare "q" on a separate line.(¦«‹8©³—Ï‹/
+z	java:S135"YReduce the total number of break and continue statements in this loop to use at most one.(ô„”¸ıÿÿÿÿ8©³—Ï‹/
+=
+java:S1659Æ"Declare "p" on a separate line.(Š¡ÃÈ8©³—Ï‹/
+M
+java:S5411â"*Use the primitive boolean expression here.(äÊÆêşÿÿÿÿ8©³—Ï‹/
+[	java:S106÷"9Replace this use of System.out or System.err by a logger.(®ıáëûÿÿÿÿ8©³—Ï‹/
+p
+java:S3776î"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(‡²òÅ8©³—Ï‹/
+=
+java:S1659Æ"Declare "q" on a separate line.(Š¡ÃÈ8©³—Ï‹/
+]
+java:S1117";Rename "result" which hides the field declared at line 345.(äù‚¬üÿÿÿÿ8©³—Ï‹/
+T
+java:S1117"6Rename "p" which hides the field declared at line 256.(ÑÅ­´8©³—Ï‹/
+=
+java:S1659à"Declare "r" on a separate line.(¦«‹8©³—Ï‹/
+T
+java:S1117Æ"6Rename "p" which hides the field declared at line 256.(Š¡ÃÈ8©³—Ï‹/
+o
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 38 to the 15 allowed.(ÅÆúœ8©³—Ï‹/
+=
+java:S1659Æ"Declare "r" on a separate line.(Š¡ÃÈ8©³—Ï‹/
+T
+java:S1117à"6Rename "p" which hides the field declared at line 256.(¦«‹8©³—Ï‹/
+T
+java:S1117§"6Rename "p" which hides the field declared at line 256.(ñïªÑ8©³—Ï‹/

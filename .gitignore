@@ -1,2 +1,5 @@
 .vscode/
-*.exe
+CppCodeSpace/.vscode/
+JavaCodeSpace/out
+JavaCodeSpace/out
+*/**/*.exe
