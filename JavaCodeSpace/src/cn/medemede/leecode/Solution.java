@@ -474,6 +474,10 @@ public class Solution {
         return getIsValidBST(root, null, null);
     }
 
+
+    /**
+     * 二叉查找树中序遍历为升序
+     */
     TreeNode pre = null;
 
     public boolean isValidBST(TreeNode root) {
@@ -508,6 +512,119 @@ public class Solution {
             }
         }
         return false;
+    }
+
+    /**
+     * HashMap
+     * <p>
+     * 单调栈：从顶部添加，逐个删除
+     *
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        HashMap<Integer, Integer> valToIndex = new HashMap<>();
+        for (int i = 0; i < nums1.length; i++) {
+            valToIndex.put(nums1[i], i);
+        }
+        int[] res = new int[nums1.length];
+        LinkedList<Integer> stack = new LinkedList<>();
+        for (int j = nums2.length - 1; j >= 0; j--) {
+            while (!stack.isEmpty() && stack.peek() < nums2[j]) {
+                stack.pop();
+            }
+            if (valToIndex.containsKey(nums2[j])) {
+                res[valToIndex.get(nums2[j])] = stack.isEmpty() ? -1 : stack.peek();
+            }
+            stack.push(nums2[j]);
+        }
+        return res;
+    }
+
+    /**
+     * 单调栈：从顶部添加，逐个删除
+     * <p>
+     * 数组长度翻倍
+     *
+     * @param nums
+     * @return
+     */
+    public int[] nextGreaterElements(int[] nums) {
+        int[] res = new int[nums.length];
+        LinkedList<Integer> stack = new LinkedList<>();
+        for (int i = 2 * nums.length - 1; i >= 0; i--) {
+            int trueI = i % nums.length;
+            while (!stack.isEmpty() && nums[trueI] >= stack.peek()) {
+                stack.poll();
+            }
+            if (i < nums.length) {
+                res[i] = stack.isEmpty() ? -1 : stack.peek();
+            }
+            stack.addFirst(nums[trueI]);
+        }
+        return res;
+    }
+
+
+    /**
+     * 单调栈：从顶部添加，逐个删除
+     * <p>
+     * 索引入栈
+     *
+     * @param T
+     * @return
+     */
+    public int[] dailyTemperatures(int[] T) {
+        int[] res = new int[T.length];
+        LinkedList<Integer> stack = new LinkedList<>();
+        for (int i = T.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && T[stack.peek()] <= T[i]) {
+                stack.poll();
+            }
+            if (!stack.isEmpty()) {
+                res[i] = stack.peek() - i;
+            }
+            stack.addFirst(i);
+        }
+        return res;
+    }
+
+    /**
+     * 单调队列：从尾部添加，逐个删除
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if(k==1)
+            return nums;
+        int[] res=new int[nums.length-k+1];
+        int i=0;
+        int j=0;
+        LinkedList<Integer> queue=new LinkedList<>();
+        while(j<k){
+            while(!queue.isEmpty()&&queue.peekLast()<nums[j]){
+                queue.removeLast();
+            }
+            queue.addLast(nums[j]);
+            j++;
+        }
+        res[i]=queue.peekFirst();
+        while(j<nums.length){
+            if(nums[i]==queue.peekFirst()){
+                queue.removeFirst();
+            }
+            while(!queue.isEmpty()&&queue.peekLast()<nums[j]){
+                queue.removeLast();
+            }
+            queue.addLast(nums[j]);
+            i++;
+            res[i]=queue.peek();
+            j++;
+        }
+        return res;
     }
 
     public static void main(String[] args) {
