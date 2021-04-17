@@ -1,54 +1,24 @@
 package cn.medemede.leecode;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
-public class LRUCache {
-    private HashMap<Integer, DoubleNode> map;
-    private DoubleList cache;
-    private int cap;
+public class LRUCache extends LinkedHashMap<Integer, Integer> {
+    protected int capacity;
 
-    public LRUCache(int cap) {
-        map = new HashMap<>();
-        cache = new DoubleList();
-        this.cap = cap;
+    @Override
+    protected boolean removeEldestEntry(java.util.Map.Entry eldest) {
+        return size() > this.capacity;
     }
 
-    private void addRecently(int key, int val) {
-        DoubleNode tmp = new DoubleNode(key, val);
-        cache.addLast(tmp);
-        map.put(key, tmp);
+    public LRUCache(int capacity) {
+        super(capacity, 1, true);
+        this.capacity = capacity;
     }
 
-    private void deleteByKey(int key) {
-        cache.remove(map.get(key));
-        map.remove(key);
-    }
-
-    private void removeLastRecently() {
-        DoubleNode lastRecentlyNode = cache.removeFirst();
-        map.remove(lastRecentlyNode.key);
-    }
-
-    private void makeAsRecently(int key) {
-        DoubleNode tmp = map.get(key);
-        cache.remove(tmp);
-        cache.addLast(tmp);
-    }
-
-    public Integer get(int key) {
-        if (map.containsKey(key)) {
-            makeAsRecently(key);
-            return map.get(key).val;
+    public int get(int key) {
+        if (super.containsKey(key)) {
+            return (int) super.get(key);
         }
-        return null;
-    }
-
-    public void put(int key, int val) {
-        if (map.containsKey(key)) {
-            deleteByKey(key);
-        } else if (cache.getSize() >= cap) {
-            removeLastRecently();
-        }
-        addRecently(key, val);
+        return -1;
     }
 }
