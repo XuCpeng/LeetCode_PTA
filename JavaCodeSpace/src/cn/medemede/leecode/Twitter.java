@@ -20,13 +20,13 @@ class TweetNode {
 
 class User {
     Integer userId;
-    Set<Integer> followeds;
+    Set<Integer> followed;
     TweetNode head;
 
     public User(Integer userId) {
         this.userId = userId;
-        followeds = new HashSet<>();
-        followeds.add(userId);
+        followed = new HashSet<>();
+        followed.add(userId);
         head = new TweetNode();
     }
 
@@ -37,11 +37,11 @@ class User {
     }
 
     public void follow(Integer userId) {
-        followeds.add(userId);
+        followed.add(userId);
     }
 
     public void unfollow(Integer userId) {
-        followeds.remove(userId);
+        followed.remove(userId);
     }
 }
 
@@ -72,7 +72,7 @@ public class Twitter {
         List<Integer> res = new ArrayList<>();
         if (users.containsKey(userId)) {
             PriorityQueue<TweetNode> pq = new PriorityQueue<>((a, b) -> b.timeStamp - a.timeStamp);
-            for (Integer followeeId : users.get(userId).followeds) {
+            for (Integer followeeId : users.get(userId).followed) {
                 TweetNode tweet = users.get(followeeId).head.next;
                 while (tweet != null) {
                     pq.add(tweet);
