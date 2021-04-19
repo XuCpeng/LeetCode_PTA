@@ -2,6 +2,12 @@ package cn.medemede.leecode;
 
 import java.util.PriorityQueue;
 
+
+/**
+ * 查找中位数
+ *
+ * <p>两个堆，使用小顶堆存放大值，使用大顶堆存放小值</p>
+ */
 public class MedianFinder {
     PriorityQueue<Integer> larger;
     PriorityQueue<Integer> smaller;

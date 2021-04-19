@@ -1,5 +1,8 @@
 package cn.medemede.leecode;
 
+/**
+ * 二叉树序列化、反序列化
+ */
 public class Codec {
     int i;
     StringBuilder sb = new StringBuilder();
