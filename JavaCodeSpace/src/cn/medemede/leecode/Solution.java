@@ -43,6 +43,13 @@ public class Solution {
         return result;
     }
 
+    /**
+     * 翻转二叉树
+     * <p>后序遍历进行翻转
+     *
+     * @param root
+     * @return
+     */
     public TreeNode invertTree(TreeNode root) {
         if (root == null)
             return null;
@@ -54,6 +61,13 @@ public class Solution {
         return root;
     }
 
+    /**
+     * 将二叉树展开为右叉树
+     * <p>先展开左子树，并返回左子树的右下节点作为右子树的根节点
+     *
+     * @param root
+     * @return
+     */
     private TreeNode getFlatten(TreeNode root) {
         TreeNode left = root.left;
         TreeNode right = root.right;
@@ -76,6 +90,13 @@ public class Solution {
         getFlatten(root);
     }
 
+    /**
+     * 连接二叉树的后继节点
+     * <p> 使用辅助函数同时连接两个子树
+     *
+     * @param node1
+     * @param node2
+     */
     private void getConnect(Node node1, Node node2) {
         if (node1 == null)
             return;
@@ -92,6 +113,48 @@ public class Solution {
         return root;
     }
 
+    /**
+     * 背包问题：将数组分割成两个子集，使得两个子集的元素和相等。未进行状态压缩。
+     * <p> 若可分割为两个子集，则子集大小恰好为 count / 2
+     * <p> dp数组的大小为 nums.length, (count / 2) + 1
+     * <p> 遍历整个数组，相当于依次添加每个物品，dp[i][j]表示前i个物品是否恰好可以装满重量为j的背包
+     *
+     * @param nums
+     * @return
+     */
+    public boolean canPartition2(int[] nums) {
+        int count = 0;
+        for (int num : nums) {
+            count += num;
+        }
+        if (count % 2 != 0) {
+            return false;
+        }
+        count = count / 2;
+
+        boolean[][] dp = new boolean[nums.length][count + 1];
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] <= count)
+                dp[i][nums[i]] = true; //物品i肯定能恰好装满重量为nums[i]的背包
+        }
+        for (int i = 1; i < nums.length; i++) {
+            for (int j = 1; j <= count; j++) {
+                dp[i][j] = dp[i - 1][j] || (j - nums[i] > 0 && dp[i - 1][j - nums[i]]);
+            }
+        }
+
+        return dp[nums.length - 1][count];
+    }
+
+    /**
+     * 背包问题：将数组分割成两个子集，使得两个子集的元素和相等。进行状态压缩
+     * <p> 若可分割为两个子集，则子集大小恰好为 count / 2
+     * <p> dp数组的大小为 (count / 2) + 1
+     * <p> 反向遍历，防止刚刚计算过的结果影响当前结果（因为当前结果需要计算dp[j - nums[i]]）
+     *
+     * @param nums
+     * @return
+     */
     public boolean canPartition(int[] nums) {
         int count = 0;
         for (int num : nums) {
@@ -105,6 +168,7 @@ public class Solution {
 
         boolean[] dp = new boolean[count + 1];
         if (nums[0] <= count)
+            // 此处具有特殊性，压缩后的dp数组未设dp[0]=true，仅仅设了dp[nums[0]]=true，这相当于寻找含有0号物品的结果，因为两个子集大小相等，那么一定有一个和为count的子集含有0号物品。
             dp[nums[0]] = true;
         for (int i = 1; i < nums.length; i++) {
             for (int j = count; j >= nums[i]; j--) {
@@ -113,6 +177,7 @@ public class Solution {
         }
         return dp[count];
     }
+
 
     public ListNode reverseList(ListNode head) {
         if (head.next == null)
@@ -241,6 +306,14 @@ public class Solution {
         return p;
     }
 
+    /**
+     * 是否为回文串
+     *
+     * <p>全局p指针从前向后移动，head指针作为递归参数从后向前移动
+     *
+     * @param head
+     * @return
+     */
     private boolean getIsPalindrome(ListNode head) {
         if (head == null) {
             return true;
@@ -263,6 +336,14 @@ public class Solution {
         return getIsPalindrome(head.next);
     }
 
+    /**
+     * 是否为回文串
+     *
+     * <p>快慢指针，slow指向中心，将后串翻转，再对比
+     *
+     * @param head
+     * @return
+     */
     public boolean isPalindrome2(ListNode head) {
         if (head == null || head.next == null) {
             return true;
@@ -494,6 +575,14 @@ public class Solution {
         return isValidBST(root.right);
     }
 
+
+    /**
+     * 链表是否有环
+     * <p>指向头结点法，把所有已经检查过的节点指向头结点，如果有环的话p.next.next也指向头结点
+     *
+     * @param head
+     * @return
+     */
     public boolean hasCycle(ListNode head) {
         if (head == null || head.next == null)
             return false;
@@ -514,10 +603,60 @@ public class Solution {
         return false;
     }
 
+
+    /**
+     * 链表是否有环
+     * <p>快慢指针法，如果有环的话fast.next.next==slow
+     *
+     * @param head
+     * @return
+     */
+    public boolean hasCycle2(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * 链表找环，返回环的起点
+     * <p>快慢指针法，如果有环的话fast.next.next==slow
+     * <p>快慢指针相遇后，将慢针回拨至起点，再次相遇时即为环的起点。
+     *
+     * @param head
+     * @return
+     */
+    public ListNode detectCycle(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                slow = head;
+                while (fast != slow) {
+                    fast = fast.next;
+                    slow = slow.next;
+                }
+                return fast;
+            }
+        }
+        return null;
+    }
+
+
     /**
      * HashMap
      * <p>
-     * 单调栈：从顶部添加，逐个删除
+     * 单调栈：从顶部添加，被挡住的逐个删除
      *
      * @param nums1
      * @param nums2
@@ -543,7 +682,7 @@ public class Solution {
     }
 
     /**
-     * 单调栈：从顶部添加，逐个删除
+     * 单调栈：从顶部添加，被挡住的逐个删除
      * <p>
      * 数组长度翻倍
      *
@@ -568,7 +707,7 @@ public class Solution {
 
 
     /**
-     * 单调栈：从顶部添加，逐个删除
+     * 单调栈：从顶部添加，被挡住的逐个删除
      * <p>
      * 索引入栈
      *
@@ -591,40 +730,183 @@ public class Solution {
     }
 
     /**
-     * 单调队列：从尾部添加，逐个删除
+     * 单调队列：从尾部添加，被挡住的逐个删除
      *
      * @param nums
      * @param k
      * @return
      */
     public int[] maxSlidingWindow(int[] nums, int k) {
-        if(k==1)
+        if (k == 1)
             return nums;
-        int[] res=new int[nums.length-k+1];
-        int i=0;
-        int j=0;
-        LinkedList<Integer> queue=new LinkedList<>();
-        while(j<k){
-            while(!queue.isEmpty()&&queue.peekLast()<nums[j]){
+        int[] res = new int[nums.length - k + 1];
+        int i = 0;
+        int j = 0;
+        LinkedList<Integer> queue = new LinkedList<>();
+        while (j < k) {
+            while (!queue.isEmpty() && queue.peekLast() < nums[j]) {
                 queue.removeLast();
             }
             queue.addLast(nums[j]);
             j++;
         }
-        res[i]=queue.peekFirst();
-        while(j<nums.length){
-            if(nums[i]==queue.peekFirst()){
+        res[i] = queue.peekFirst();
+        while (j < nums.length) {
+            if (nums[i] == queue.peekFirst()) {
                 queue.removeFirst();
             }
-            while(!queue.isEmpty()&&queue.peekLast()<nums[j]){
+            while (!queue.isEmpty() && queue.peekLast() < nums[j]) {
                 queue.removeLast();
             }
             queue.addLast(nums[j]);
             i++;
-            res[i]=queue.peek();
+            res[i] = queue.peek();
             j++;
         }
         return res;
+    }
+
+    /**
+     * 吃香蕉速度
+     * <p>使用二分查找左边界
+     * <p>查找到目标后right=mid，而非return
+     * <p>mid=left+(right-left)/2 防止溢出
+     * <p>left=mid+1,right=mid
+     *
+     * @param piles 每堆香蕉数量
+     * @param h     总时间限制
+     * @return 每小时最少吃多少根香蕉
+     */
+    public int minEatingSpeed(int[] piles, int h) {
+        int left = 1;
+        int right = 1;
+        for (int pile : piles) {
+            if (pile > right)
+                right = pile;
+        }
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            int hours = 0;
+            for (int pile : piles) {
+                hours += pile / mid;
+                if (pile % mid > 0) {
+                    hours++;
+                }
+            }
+            if (hours <= h)
+                right = mid;
+            else
+                left = mid + 1;
+        }
+        return right;
+    }
+
+    /**
+     * 最小船载
+     * <p>使用二分查找左边界
+     * <p>查找到目标后right=mid，而非return
+     * <p>mid=left+(right-left)/2 防止溢出
+     * <p>left=mid+1,right=mid
+     *
+     * @param weights
+     * @param D
+     * @return
+     */
+    public int shipWithinDays(int[] weights, int D) {
+        int left = 0;
+        int right = 0;
+        for (int weight : weights) {
+            if (weight > left)
+                left = weight;
+            right += weight;
+        }
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            int days = 0;
+            int tmpWeight = 0;
+
+            for (int weight : weights) {
+                tmpWeight += weight;
+                if (tmpWeight > mid) {
+                    days++;
+                    tmpWeight = weight;
+                }
+            }
+            days++;
+            if (days <= D)
+                right = mid;
+            else
+                left = mid + 1;
+        }
+        return right;
+    }
+
+    /**
+     * 双指针
+     *
+     * @param numbers
+     * @param target
+     * @return
+     */
+    public int[] twoSum(int[] numbers, int target) {
+        int left = 0;
+        int right = numbers.length - 1;
+        int[] res = new int[2];
+        while (left < right) {
+            if (numbers[left] + numbers[right] == target) {
+                res[0] = left + 1;
+                res[1] = right + 1;
+                break;
+            } else if (numbers[left] + numbers[right] < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 翻转字符串 char[]
+     *
+     * @param s
+     */
+    public void reverseString(char[] s) {
+        int left = 0;
+        int right = s.length - 1;
+        char tmp;
+        while (left < right) {
+            tmp = s[left];
+            s[left] = s[right];
+            s[right] = tmp;
+            left++;
+            right--;
+        }
+    }
+
+    /**
+     * 删除链表倒数第n个节点，双指针
+     *
+     * @param head
+     * @param n
+     * @return
+     */
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode newNode = new ListNode();
+        newNode.next = head;
+        ListNode left = newNode;
+        ListNode right = newNode;
+        while (right != null && n > 0) {
+            right = right.next;
+            n--;
+        }
+        while (right != null) {
+            left = left.next;
+            right = right.next;
+        }
+        left.next = left.next.next;
+        return newNode.next;
     }
 
     public static void main(String[] args) {
