@@ -886,7 +886,8 @@ public class Solution {
     }
 
     /**
-     * 删除链表倒数第n个节点，双指针
+     * 删除链表倒数第n个节点
+     * <p>双指针</p>
      *
      * @param head
      * @param n
@@ -907,6 +908,183 @@ public class Solution {
         }
         left.next = left.next.next;
         return newNode.next;
+    }
+
+    /**
+     * 最小覆盖子串
+     * <p>滑动窗口</p>
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public String minWindow(String s, String t) {
+        char[] ss = s.toCharArray();
+        char[] ts = t.toCharArray();
+        int resLeft;
+        int resRight;
+        int left = 0;
+        int right = 0;
+        int[] count = new int[128];
+        for (char a : ts) {
+            count[a]++;
+        }
+        while (right < ss.length && !isSubStr(count)) {
+            count[ss[right]]--;
+            right++;
+        }
+        if (!isSubStr(count))
+            return "";
+        while (isSubStr(count)) {
+            count[ss[left]]++;
+            left++;
+        }
+        resLeft = left - 1;
+        resRight = right;
+        while (right < ss.length) {
+            while (right < ss.length && !isSubStr(count)) {
+                count[ss[right]]--;
+                right++;
+            }
+            while (isSubStr(count)) {
+                count[ss[left]]++;
+                left++;
+            }
+            if (right - left + 1 < resRight - resLeft) {
+                resLeft = left - 1;
+                resRight = right;
+            }
+        }
+
+        return s.substring(resLeft, resRight);
+    }
+
+    private boolean isSubStr(int[] count) {
+        for (int c : count) {
+            if (c > 0)
+                return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * s2是否包含s1一个排列，只有小写字母
+     * <p>滑动窗口</p>
+     *
+     * @param s1
+     * @param s2
+     * @return
+     */
+    public boolean checkInclusion(String s1, String s2) {
+        if (s1 == null || "".equals(s1))
+            return true;
+        if (s2.length() < s1.length())
+            return false;
+        char[] s1Chars = s1.toCharArray();
+        char[] s2Chars = s2.toCharArray();
+        int[] count = new int[128];
+        for (char a : s1Chars) {
+            count[a]++;
+        }
+        int left = 0;
+        int right = 0;
+        for (; right < s1Chars.length; right++) {
+            count[s2Chars[right]]--;
+        }
+        if (isSubStr2(count))
+            return true;
+        while (right < s2Chars.length) {
+            count[s2Chars[right]]--;
+            count[s2Chars[left]]++;
+            left++;
+            if (isSubStr2(count))
+                return true;
+            right++;
+        }
+        return false;
+    }
+
+    private boolean isSubStr2(int[] count) {
+        for (int i = 96; i < 123; i++) {
+            if (count[i] != 0)
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * 寻找字母异位词，并返回索引
+     * <p>滑动窗口</p>
+     *
+     * @param s
+     * @param p
+     * @return
+     */
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> res = new ArrayList<>();
+        if (s.length() < p.length())
+            return res;
+        char[] sChars = s.toCharArray();
+        char[] pChars = p.toCharArray();
+        int[] count = new int[128];
+        for (char a : pChars) {
+            count[a]++;
+        }
+        int left = 0;
+        int right = 0;
+        for (; right < pChars.length; right++) {
+            count[sChars[right]]--;
+        }
+        if (isSubStr2(count))
+            res.add(left);
+        while (right < sChars.length) {
+            count[sChars[right]]--;
+            count[sChars[left]]++;
+            left++;
+            if (isSubStr2(count))
+                res.add(left);
+            right++;
+        }
+        return res;
+    }
+
+    /**
+     * 最长无重复子串
+     * <p>滑动窗口</p>
+     *
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring(String s) {
+        int result = 0;
+        int left = 0;
+        int right = 0;
+        boolean[] flag = new boolean[128];
+        char[] ss = s.toCharArray();
+        while (right < ss.length && !flag[ss[right]]) {
+            flag[ss[right]] = true;
+            right++;
+        }
+        if (right == ss.length)
+            return right;
+        result = right;
+        while (right < ss.length) {
+            while (ss[left] != ss[right]) {
+                flag[ss[left]] = false;
+                left++;
+            }
+            left++;
+            right++;
+            while (right < ss.length && !flag[ss[right]]) {
+                flag[ss[right]] = true;
+                right++;
+            }
+            if (right - left > result) {
+                result = right - left;
+            }
+        }
+        return result;
     }
 
     public static void main(String[] args) {
