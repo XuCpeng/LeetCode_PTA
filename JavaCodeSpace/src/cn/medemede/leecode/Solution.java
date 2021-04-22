@@ -1087,6 +1087,150 @@ public class Solution {
         return result;
     }
 
+    /**
+     * 去除重复字母，且保持其他字母顺序不变，且字典序最小。
+     * <p>基本思想：从前到后找到s[i]>s[i+1]，将s[i]删除；
+     * <p>1. 若栈中不存在当前元素，则将比自己大且后面还有的元素弹出，入栈；
+     * <p>2. 若栈中存在此元素，则什么也不做
+     *
+     * @param s
+     * @return
+     */
+    public String removeDuplicateLetters(String s) {
+        int[] flag = new int[128];
+        boolean[] inStack = new boolean[128];
+        for (int i = 0; i < s.length(); i++) {
+            flag[s.charAt(i)]++;
+        }
+        LinkedList<Character> s1 = new LinkedList<>();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            char x = s.charAt(i);
+            while (!s1.isEmpty() && s1.peek() > x && flag[s1.peek()] > 1) {
+                inStack[s1.peek()] = false;
+                s1.pop();
+            }
+            if (!inStack[x]) {
+                s1.push(x);
+                inStack[x] = true;
+            }
+
+        }
+
+        while (!s1.isEmpty()) {
+            sb.append(s1.pop());
+        }
+        return sb.reverse().toString();
+    }
+
+    /**
+     * 原地删除有序数组重复元素
+     *
+     * @param nums
+     * @return
+     */
+    public int removeDuplicates(int[] nums) {
+        int i = 0;
+        int j = 0;
+        while (j < nums.length) {
+            while (j < nums.length - 1 && nums[j + 1] == nums[j]) {
+                j++;
+            }
+            nums[i] = nums[j];
+            i++;
+            j++;
+        }
+        return i;
+    }
+
+    /**
+     * 移除有序链表重复元素
+     *
+     * @param head
+     * @return
+     */
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode p = head;
+        while (p != null && p.next != null) {
+            if (p.val == p.next.val) {
+                p.next = p.next.next;
+            } else
+                p = p.next;
+        }
+        return head;
+    }
+
+    /**
+     * 原地删除指定元素
+     *
+     * @param nums
+     * @param val
+     * @return
+     */
+    public int removeElement(int[] nums, int val) {
+        int i = 0;
+        while (i < nums.length) {
+            if (nums[i] == val)
+                break;
+            i++;
+        }
+        int j = i + 1;
+        while (j < nums.length) {
+            if (nums[j] != val) {
+                nums[i] = nums[j];
+                i++;
+            }
+            j++;
+        }
+        return i + 1;
+    }
+
+    /**
+     * 将0移动到末尾
+     *
+     * @param nums
+     */
+    public void moveZeroes(int[] nums) {
+        int i = 0;
+        while (i < nums.length) {
+            if (nums[i] == 0)
+                break;
+            i++;
+        }
+        int j = i + 1;
+        while (j < nums.length) {
+            if (nums[j] != 0) {
+                nums[i] = nums[j];
+                i++;
+            }
+            j++;
+        }
+        while (i < nums.length) {
+            nums[i] = 0;
+        }
+    }
+
+    /**
+     * 两数之和为target
+     *
+     * <p>使用HashMap存储value到index的映射。
+     * <p>重点在于初始化hashmap的过程中就进行判断，可以避免重复值的影响。
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int[] twoSum2(int[] nums, int target) {
+        HashMap<Integer, Integer> indexToVal = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (indexToVal.containsKey(target - nums[i])) {
+                return new int[]{indexToVal.get(target - nums[i]), i};
+            }
+            indexToVal.put(nums[i], i);
+        }
+        return new int[]{};
+    }
+
     public static void main(String[] args) {
         Solution s = new Solution();
         ListNode head = new ListNode(1);

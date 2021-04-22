@@ -2,6 +2,13 @@ package cn.medemede.leecode;
 
 import java.util.*;
 
+/**
+ * 黑名单随机数
+ *
+ * <p>将黑名单数字所在位置的值，映射为尾部的值
+ * <p>用HashMap记录黑名单位置的值
+ * <p>映射之前要先把尾部的黑名单值去除
+ */
 public class SkipBlackListRandom {
     Random random;
     int target;

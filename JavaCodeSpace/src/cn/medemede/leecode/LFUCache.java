@@ -7,9 +7,9 @@ import java.util.LinkedHashSet;
 /**
  * LFU 算法的淘汰策略是 Least Frequently Used，也就是每次淘汰那些使用次数最少的数据。
  * <p>
- *     HashMap<Integer, Integer> ketToVal;
- *     HashMap<Integer, Integer> keyToFreq;
- *     HashMap<Integer, LinkedHashSet<Integer>> freqToKeys;
+ * HashMap<Integer, Integer> ketToVal;
+ * HashMap<Integer, Integer> keyToFreq;
+ * HashMap<Integer, LinkedHashSet<Integer>> freqToKeys;
  * </p>
  */
 public class LFUCache {

@@ -2,21 +2,26 @@ package cn.medemede.leecode;
 
 import java.util.LinkedList;
 
+/**
+ * 用队列实现栈
+ * <p>记录尾部指针，pop时将队尾之前的元素全部出队并按顺序重新添加到队尾
+ */
 public class StackUsingQueues {
     int top;
     LinkedList<Integer> stack;
+
     /**
      * Initialize your data structure here.
      */
     public StackUsingQueues() {
-        stack=new LinkedList<>();
+        stack = new LinkedList<>();
     }
 
     /**
      * Push element x onto stack.
      */
     public void push(int x) {
-        top=x;
+        top = x;
         stack.addLast(x);
     }
 
@@ -24,15 +29,15 @@ public class StackUsingQueues {
      * Removes the element on top of the stack and returns that element.
      */
     public int pop() {
-        int res=top;
-        int size=stack.size();
-        while(size>1){
+        int res = top;
+        int size = stack.size();
+        while (size > 1) {
             stack.addLast(stack.pollFirst());
             size--;
         }
         stack.removeFirst();
         if (!stack.isEmpty())
-            top=stack.peekLast();
+            top = stack.peekLast();
         return res;
     }
 
@@ -51,13 +56,13 @@ public class StackUsingQueues {
     }
 
     public static void main(String[] args) {
-        StackUsingQueues s=new StackUsingQueues();
+        StackUsingQueues s = new StackUsingQueues();
         s.push(1);
         s.push(2);
         s.push(3);
-        int a=s.pop();
-        int b=s.pop();
-        int c=s.pop();
+        int a = s.pop();
+        int b = s.pop();
+        int c = s.pop();
         System.out.println();
     }
 }
