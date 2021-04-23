@@ -51,8 +51,9 @@ public class Solution {
      * @return
      */
     public TreeNode invertTree(TreeNode root) {
-        if (root == null)
+        if (root == null) {
             return null;
+        }
         invertTree(root.left);
         invertTree(root.right);
         TreeNode tmp = root.left;
@@ -85,8 +86,9 @@ public class Solution {
     }
 
     public void flatten(TreeNode root) {
-        if (root == null)
+        if (root == null) {
             return;
+        }
         getFlatten(root);
     }
 
@@ -98,8 +100,9 @@ public class Solution {
      * @param node2
      */
     private void getConnect(Node node1, Node node2) {
-        if (node1 == null)
+        if (node1 == null) {
             return;
+        }
         node1.next = node2;
         getConnect(node1.left, node1.right);
         getConnect(node2.left, node2.right);
@@ -107,8 +110,9 @@ public class Solution {
     }
 
     public Node connect(Node root) {
-        if (root == null)
+        if (root == null) {
             return null;
+        }
         getConnect(root.left, root.right);
         return root;
     }
@@ -134,8 +138,9 @@ public class Solution {
 
         boolean[][] dp = new boolean[nums.length][count + 1];
         for (int i = 0; i < nums.length; i++) {
-            if (nums[i] <= count)
+            if (nums[i] <= count) {
                 dp[i][nums[i]] = true; //物品i肯定能恰好装满重量为nums[i]的背包
+            }
         }
         for (int i = 1; i < nums.length; i++) {
             for (int j = 1; j <= count; j++) {
@@ -167,9 +172,10 @@ public class Solution {
         count = count / 2;
 
         boolean[] dp = new boolean[count + 1];
-        if (nums[0] <= count)
+        if (nums[0] <= count) {
             // 此处具有特殊性，压缩后的dp数组未设dp[0]=true，仅仅设了dp[nums[0]]=true，这相当于寻找含有0号物品的结果，因为两个子集大小相等，那么一定有一个和为count的子集含有0号物品。
             dp[nums[0]] = true;
+        }
         for (int i = 1; i < nums.length; i++) {
             for (int j = count; j >= nums[i]; j--) {
                 dp[j] = dp[j] || dp[j - nums[i]];
@@ -180,8 +186,9 @@ public class Solution {
 
 
     public ListNode reverseList(ListNode head) {
-        if (head.next == null)
+        if (head.next == null) {
             return head;
+        }
         ListNode newHead = reverseList(head.next);
         head.next.next = head;
         return newHead;
@@ -215,8 +222,9 @@ public class Solution {
     }
 
     private ListNode getReverseBetween(ListNode node, ListNode q) {
-        if (node == q)
+        if (node == q) {
             return node;
+        }
         getReverseBetween(node.next, q).next = node;
         return node;
     }
@@ -403,8 +411,9 @@ public class Solution {
     Map<Integer, Integer> indexHash = new HashMap<>();
 
     private TreeNode getBuildTree(int[] preorder, int index, int inStart, int inEnd) {
-        if (inStart >= inEnd)
+        if (inStart >= inEnd) {
             return null;
+        }
         int val = preorder[index];
         TreeNode root = new TreeNode(val);
         int i = indexHash.get(val);
@@ -414,8 +423,9 @@ public class Solution {
     }
 
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        if (preorder.length == 0)
+        if (preorder.length == 0) {
             return null;
+        }
         for (int i = 0; i < inorder.length; i++) {
             indexHash.put(inorder[i], i);
         }
@@ -472,10 +482,11 @@ public class Solution {
                 root.val = tmp.val;
             }
             if (leftOrRight == 1) {
-                if (parent.left.right != null)
+                if (parent.left.right != null) {
                     parent.left = parent.left.right;
-                else
+                } else {
                     parent.left = parent.left.left;
+                }
             } else {
                 if (parent.right.left != null) {
                     parent.right = parent.right.left;
@@ -584,17 +595,19 @@ public class Solution {
      * @return
      */
     public boolean hasCycle(ListNode head) {
-        if (head == null || head.next == null)
+        if (head == null || head.next == null) {
             return false;
-        if (head.next == head)
+        }
+        if (head.next == head) {
             return true;
+        }
         ListNode p = head.next;
         head.next = head;
         ListNode q;
         while (p.next != null) {
-            if (p.next.next == head)
+            if (p.next.next == head) {
                 return true;
-            else {
+            } else {
                 q = p.next;
                 p.next = head;
                 p = q;
@@ -737,8 +750,9 @@ public class Solution {
      * @return
      */
     public int[] maxSlidingWindow(int[] nums, int k) {
-        if (k == 1)
+        if (k == 1) {
             return nums;
+        }
         int[] res = new int[nums.length - k + 1];
         int i = 0;
         int j = 0;
@@ -781,8 +795,9 @@ public class Solution {
         int left = 1;
         int right = 1;
         for (int pile : piles) {
-            if (pile > right)
+            if (pile > right) {
                 right = pile;
+            }
         }
         while (left < right) {
             int mid = left + (right - left) / 2;
@@ -793,10 +808,11 @@ public class Solution {
                     hours++;
                 }
             }
-            if (hours <= h)
+            if (hours <= h) {
                 right = mid;
-            else
+            } else {
                 left = mid + 1;
+            }
         }
         return right;
     }
@@ -816,8 +832,9 @@ public class Solution {
         int left = 0;
         int right = 0;
         for (int weight : weights) {
-            if (weight > left)
+            if (weight > left) {
                 left = weight;
+            }
             right += weight;
         }
 
@@ -834,10 +851,11 @@ public class Solution {
                 }
             }
             days++;
-            if (days <= D)
+            if (days <= D) {
                 right = mid;
-            else
+            } else {
                 left = mid + 1;
+            }
         }
         return right;
     }
@@ -933,8 +951,9 @@ public class Solution {
             count[ss[right]]--;
             right++;
         }
-        if (!isSubStr(count))
+        if (!isSubStr(count)) {
             return "";
+        }
         while (isSubStr(count)) {
             count[ss[left]]++;
             left++;
@@ -961,8 +980,9 @@ public class Solution {
 
     private boolean isSubStr(int[] count) {
         for (int c : count) {
-            if (c > 0)
+            if (c > 0) {
                 return false;
+            }
         }
         return true;
     }
@@ -977,10 +997,12 @@ public class Solution {
      * @return
      */
     public boolean checkInclusion(String s1, String s2) {
-        if (s1 == null || "".equals(s1))
+        if (s1 == null || "".equals(s1)) {
             return true;
-        if (s2.length() < s1.length())
+        }
+        if (s2.length() < s1.length()) {
             return false;
+        }
         char[] s1Chars = s1.toCharArray();
         char[] s2Chars = s2.toCharArray();
         int[] count = new int[128];
@@ -992,14 +1014,16 @@ public class Solution {
         for (; right < s1Chars.length; right++) {
             count[s2Chars[right]]--;
         }
-        if (isSubStr2(count))
+        if (isSubStr2(count)) {
             return true;
+        }
         while (right < s2Chars.length) {
             count[s2Chars[right]]--;
             count[s2Chars[left]]++;
             left++;
-            if (isSubStr2(count))
+            if (isSubStr2(count)) {
                 return true;
+            }
             right++;
         }
         return false;
@@ -1007,8 +1031,9 @@ public class Solution {
 
     private boolean isSubStr2(int[] count) {
         for (int i = 96; i < 123; i++) {
-            if (count[i] != 0)
+            if (count[i] != 0) {
                 return false;
+            }
         }
         return true;
     }
@@ -1023,8 +1048,9 @@ public class Solution {
      */
     public List<Integer> findAnagrams(String s, String p) {
         List<Integer> res = new ArrayList<>();
-        if (s.length() < p.length())
+        if (s.length() < p.length()) {
             return res;
+        }
         char[] sChars = s.toCharArray();
         char[] pChars = p.toCharArray();
         int[] count = new int[128];
@@ -1036,14 +1062,16 @@ public class Solution {
         for (; right < pChars.length; right++) {
             count[sChars[right]]--;
         }
-        if (isSubStr2(count))
+        if (isSubStr2(count)) {
             res.add(left);
+        }
         while (right < sChars.length) {
             count[sChars[right]]--;
             count[sChars[left]]++;
             left++;
-            if (isSubStr2(count))
+            if (isSubStr2(count)) {
                 res.add(left);
+            }
             right++;
         }
         return res;
@@ -1066,8 +1094,9 @@ public class Solution {
             flag[ss[right]] = true;
             right++;
         }
-        if (right == ss.length)
+        if (right == ss.length) {
             return right;
+        }
         result = right;
         while (right < ss.length) {
             while (ss[left] != ss[right]) {
@@ -1154,8 +1183,9 @@ public class Solution {
         while (p != null && p.next != null) {
             if (p.val == p.next.val) {
                 p.next = p.next.next;
-            } else
+            } else {
                 p = p.next;
+            }
         }
         return head;
     }
@@ -1170,8 +1200,9 @@ public class Solution {
     public int removeElement(int[] nums, int val) {
         int i = 0;
         while (i < nums.length) {
-            if (nums[i] == val)
+            if (nums[i] == val) {
                 break;
+            }
             i++;
         }
         int j = i + 1;
@@ -1193,8 +1224,9 @@ public class Solution {
     public void moveZeroes(int[] nums) {
         int i = 0;
         while (i < nums.length) {
-            if (nums[i] == 0)
+            if (nums[i] == 0) {
                 break;
+            }
             i++;
         }
         int j = i + 1;
@@ -1229,6 +1261,38 @@ public class Solution {
             indexToVal.put(nums[i], i);
         }
         return new int[]{};
+    }
+
+    public int fib(int n) {
+        if (n == 0) {
+            return 0;
+        }
+        var a = 0;
+        var b = 1;
+        int res = a + b;
+        while (n > 1) {
+            res = a + b;
+            a = b;
+            b = res;
+            n--;
+        }
+        return res;
+    }
+
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        dp[0] = 0;
+        for (int i = 1; i < amount + 1; i++) {
+            dp[i] = amount + 1;
+        }
+        for (int i = 1; i < amount + 1; i++) {
+            for (int coin : coins) {
+                if (i - coin >= 0) {
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                }
+            }
+        }
+        return dp[amount] == amount + 1 ? -1 : dp[amount];
     }
 
     public static void main(String[] args) {
