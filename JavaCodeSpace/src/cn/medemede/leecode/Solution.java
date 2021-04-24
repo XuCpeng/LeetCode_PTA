@@ -1279,6 +1279,14 @@ public class Solution {
         return res;
     }
 
+    /**
+     * 零钱兑换
+     * <p>动态规划</p>
+     *
+     * @param coins
+     * @param amount
+     * @return
+     */
     public int coinChange(int[] coins, int amount) {
         int[] dp = new int[amount + 1];
         dp[0] = 0;
@@ -1293,6 +1301,115 @@ public class Solution {
             }
         }
         return dp[amount] == amount + 1 ? -1 : dp[amount];
+    }
+
+    /**
+     * 下降路径最下和
+     * <p>动态规划</p>
+     *
+     * @param matrix
+     * @return
+     */
+    public int minFallingPathSum(int[][] matrix) {
+        int n = matrix.length;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int tmp = matrix[i - 1][j];
+                if (j - 1 >= 0) {
+                    tmp = Math.min(tmp, matrix[i - 1][j - 1]);
+                }
+                if (j + 1 < n) {
+                    tmp = Math.min(tmp, matrix[i - 1][j + 1]);
+                }
+                matrix[i][j] = matrix[i][j] + tmp;
+            }
+        }
+        int res = matrix[n - 1][0];
+        for (int x : matrix[n - 1]) {
+            res = Math.min(res, x);
+        }
+        return res;
+    }
+
+    /**
+     * 目标和
+     * <p>动态规划,递推公式</p>
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int findTargetSumWays(int[] nums, int target) {
+        int minvalue = 1000;
+        int[] dp = new int[2001];
+        dp[nums[0] + minvalue] = 1;
+        dp[-nums[0] + minvalue] += 1;
+        for (int i = 1; i < nums.length; i++) {
+            int[] tmp = new int[2001];
+            for (int j = -1000; j < 1001; j++) {
+                if (dp[j + minvalue] > 0) {
+                    tmp[j - nums[i] + minvalue] += dp[j + minvalue];
+                    tmp[j + nums[i] + minvalue] += dp[j + minvalue];
+                }
+            }
+            dp = tmp;
+        }
+        return dp[target + minvalue];
+    }
+
+    /**
+     * 目标和
+     * <p>动态规划，背包问题</p>
+     * <p>动态规划问题还是要分清“选择”</p>
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int findTargetSumWays2(int[] nums, int target) {
+        int sum = 0;
+        for (int x : nums) {
+            sum += x;
+        }
+        if ((sum + target) % 2 != 0) {
+            return 0;
+        }
+        target = (sum + target) / 2;
+
+        int[] dp = new int[target + 1];
+        dp[0] = 1;
+        for (int i = 1; i <= nums.length; i++) {
+            for (int j = target; j >= 0; j--) { // 注意 j>=0
+                if (j >= nums[i - 1]) {
+                    dp[j] += dp[j - nums[i - 1]];
+                }
+            }
+        }
+        return dp[target];
+    }
+
+    /**
+     * 最长公共子序列
+     * <p>动态规划</p>
+     *
+     * @param text1
+     * @param text2
+     * @return
+     */
+    public int longestCommonSubsequence(String text1, String text2) {
+        char[] t1 = text1.toCharArray();
+        char[] t2 = text2.toCharArray();
+        int[][] dp = new int[t1.length + 1][t2.length + 1];
+        for (int i = 1; i <= t1.length; i++) {
+            for (int j = 1; j <= t2.length; j++) {
+                if (t1[i - 1] == t2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[t1.length][t2.length];
     }
 
     public static void main(String[] args) {
