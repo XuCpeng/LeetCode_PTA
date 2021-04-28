@@ -1267,8 +1267,8 @@ public class Solution {
         if (n == 0) {
             return 0;
         }
-        var a = 0;
-        var b = 1;
+        int a = 0;
+        int b = 1;
         int res = a + b;
         while (n > 1) {
             res = a + b;
@@ -1390,7 +1390,7 @@ public class Solution {
 
     /**
      * 最长公共子序列
-     * <p>动态规划</p>
+     * <p>动态规划，dp数组，非递归，自底向上</p>
      *
      * @param text1
      * @param text2
@@ -1411,6 +1411,46 @@ public class Solution {
         }
         return dp[t1.length][t2.length];
     }
+
+    /**
+     * 最长公共子序列
+     * <p>动态规划，dp函数，递归，备忘录，自顶向下</p>
+     * <p>之所以是自顶向下，是因为递归算法的真正开始计算是在退栈的时候，所以虽然递归算法的推进是从0开始不断+1，
+     * 但实际计算是在==length之后开始，所以相当于--，所以与非递归算法在t1[i] != t2[j]时是-1，而递归算法是+1</p>
+     *
+     * @param text1
+     * @param text2
+     * @return
+     */
+    int[][] memo;
+
+    public int longestCommonSubsequence2(String text1, String text2) {
+        char[] t1 = text1.toCharArray();
+        char[] t2 = text2.toCharArray();
+        memo = new int[t1.length][t2.length];
+        for (int[] m : memo) {
+            Arrays.fill(m, -1);
+        }
+        return getLongestCommonSubsequence(t1, 0, t2, 0);
+    }
+
+    private int getLongestCommonSubsequence(char[] t1, int i, char[] t2, int j) {
+        if (i == t1.length || j == t2.length) {
+            return 0;
+        }
+        if (memo[i][j] != -1) {
+            return memo[i][j];
+        }
+        if (t1[i] == t2[j]) {
+            memo[i][j] = getLongestCommonSubsequence(t1, i + 1, t2, j + 1) + 1;
+        } else {
+            memo[i][j] = Math.max(
+                    getLongestCommonSubsequence(t1, i + 1, t2, j),
+                    getLongestCommonSubsequence(t1, i, t2, j + 1));
+        }
+        return memo[i][j];
+    }
+
 
     /**
      * 最长递增子序列
@@ -1507,6 +1547,54 @@ public class Solution {
             }
         }
         return res;
+    }
+
+    /**
+     * 连续最大和
+     *
+     * @param nums
+     * @return
+     */
+    public int maxSubArray(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        int max = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i - 1] > 0) {
+                nums[i] += nums[i - 1];
+            }
+            max = Math.max(max, nums[i]);
+        }
+        return max;
+    }
+
+    public int minDistance(String word1, String word2) {
+        char[] w1 = word1.toCharArray();
+        char[] w2 = word2.toCharArray();
+        memo = new int[w1.length][w2.length];
+        for (int[] m : memo) {
+            Arrays.fill(m, -1);
+        }
+        return getMinDistance(w1, 0, w2, 0);
+    }
+
+    private int getMinDistance(char[] w1, int i, char[] w2, int j) {
+        if (i == w1.length) {
+            return w2.length - j;
+        }
+        if (j == w2.length) {
+            return w1.length - i;
+        }
+        if (memo[i][j] != -1) {
+            return memo[i][j];
+        }
+        if (w1[i] == w2[j]) {
+            memo[i][j] = getMinDistance(w1, i + 1, w2, j + 1);
+        } else {
+            memo[i][j] = Math.min(getMinDistance(w1, i + 1, w2, j), getMinDistance(w1, i, w2, j + 1)) + 1;
+        }
+        return memo[i][j];
     }
 
 
