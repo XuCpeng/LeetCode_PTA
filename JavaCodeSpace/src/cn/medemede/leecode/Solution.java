@@ -1569,6 +1569,14 @@ public class Solution {
         return max;
     }
 
+    /**
+     * 两个字符串的删除操作
+     * <p>动态规划，递归，备忘录<p/>
+     *
+     * @param word1
+     * @param word2
+     * @return
+     */
     public int minDistance(String word1, String word2) {
         char[] w1 = word1.toCharArray();
         char[] w2 = word2.toCharArray();
@@ -1597,16 +1605,113 @@ public class Solution {
         return memo[i][j];
     }
 
+    /**
+     * 两个字符串的最小ASCII删除和
+     * <p>动态规划，递归，备忘录</p>
+     *
+     * @param s1
+     * @param s2
+     * @return
+     */
+    public int minimumDeleteSum(String s1, String s2) {
+        char[] w1 = s1.toCharArray();
+        char[] w2 = s2.toCharArray();
+        memo = new int[w1.length][w2.length];
+        for (int[] m : memo) {
+            Arrays.fill(m, -1);
+        }
+        return getMinimumDeleteSum(w1, 0, w2, 0);
+    }
+
+    private int getMinimumDeleteSum(char[] w1, int i, char[] w2, int j) {
+        if (i == w1.length) {
+            int sum = 0;
+            while (j < w2.length) {
+                sum += w2[j];
+                j++;
+            }
+            return sum;
+        }
+        if (j == w2.length) {
+            int sum = 0;
+            while (i < w1.length) {
+                sum += w1[i];
+                i++;
+            }
+            return sum;
+        }
+
+        if (memo[i][j] != -1) {
+            return memo[i][j];
+        }
+        if (w1[i] == w2[j]) {
+            memo[i][j] = getMinimumDeleteSum(w1, i + 1, w2, j + 1);
+        } else {
+            memo[i][j] = Math.min(getMinimumDeleteSum(w1, i + 1, w2, j) + w1[i], getMinimumDeleteSum(w1, i, w2, j + 1) + w2[j]);
+        }
+        return memo[i][j];
+    }
+
+    /**
+     * 最长回文子序列
+     * <p>动态规划，递归</p>
+     *
+     * @param s
+     * @return
+     */
+    public int longestPalindromeSubseq(String s) {
+        memo = new int[s.length()][s.length()];
+        for (int[] x : memo) {
+            Arrays.fill(x, -1);
+        }
+        return getLongestPalindromeSubseq(s.toCharArray(), 0, s.length() - 1);
+    }
+
+    private int getLongestPalindromeSubseq(char[] s, int i, int j) {
+        if (i > j) {
+            return 0;
+        }
+        if (i == j) {
+            return 1;
+        }
+        if (memo[i][j] != -1) {
+            return memo[i][j];
+        }
+        if (s[i] == s[j]) {
+            memo[i][j] = getLongestPalindromeSubseq(s, i + 1, j - 1) + 2;
+        } else {
+            memo[i][j] = Math.max(getLongestPalindromeSubseq(s, i + 1, j), getLongestPalindromeSubseq(s, i, j - 1));
+        }
+        return memo[i][j];
+    }
+
+    /**
+     * 最长回文子序列
+     * <p>动态规划，非递归，dp数组</p>
+     *
+     * @param s
+     * @return
+     */
+    public int longestPalindromeSubseq2(String s) {
+        char[] chars = s.toCharArray();
+        int[][] dp = new int[chars.length][chars.length];
+        for (int i = 0; i < chars.length; i++) {
+            dp[i][i] = 1;
+        }
+        for (int i = chars.length - 1; i >= 0; i--) {
+            for (int j = i + 1; j < chars.length; j++) {
+                if (chars[i] == chars[j]) {
+                    dp[i][j] = dp[i + 1][j - 1] + 2;
+                } else {
+                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[0][chars.length - 1];
+    }
 
     public static void main(String[] args) {
         Solution s = new Solution();
-        ListNode head = new ListNode(1);
-        ListNode p = head;
-        for (int i = 2; i <= 5; i++) {
-            p.next = new ListNode(i);
-            p = p.next;
-        }
-        ListNode result = s.reverseKGroup2(head, 2);
-        System.out.println(result);
+        System.out.println(s.longestPalindromeSubseq2("bbbab"));
     }
 }
