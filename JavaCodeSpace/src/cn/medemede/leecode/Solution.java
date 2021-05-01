@@ -161,27 +161,26 @@ public class Solution {
      * @return
      */
     public boolean canPartition(int[] nums) {
-        int count = 0;
-        for (int num : nums) {
-            count += num;
+        int sum = 0;
+        for (int x : nums) {
+            sum += x;
         }
-        if (count % 2 != 0) {
+        if (sum % 2 != 0) {
             return false;
         }
+        sum = sum / 2;
 
-        count = count / 2;
-
-        boolean[] dp = new boolean[count + 1];
-        if (nums[0] <= count) {
-            // 此处具有特殊性，压缩后的dp数组未设dp[0]=true，仅仅设了dp[nums[0]]=true，这相当于寻找含有0号物品的结果，因为两个子集大小相等，那么一定有一个和为count的子集含有0号物品。
-            dp[nums[0]] = true;
-        }
-        for (int i = 1; i < nums.length; i++) {
-            for (int j = count; j >= nums[i]; j--) {
-                dp[j] = dp[j] || dp[j - nums[i]];
+        boolean[] dp = new boolean[sum + 1];
+        dp[0] = true;
+        for (int i = 1; i <= nums.length; i++) {
+            // 非常重要：此处需要倒序遍历，每个数字只能用一次
+            for (int j = sum; j > 0; j--) {
+                if (!dp[j] && j - nums[i - 1] >= 0) {
+                    dp[j] = dp[j - nums[i - 1]];
+                }
             }
         }
-        return dp[count];
+        return dp[sum];
     }
 
 
@@ -1281,7 +1280,8 @@ public class Solution {
 
     /**
      * 零钱兑换
-     * <p>动态规划</p>
+     * <p>计算可以凑成总金额所需的最少的硬币个数,每种硬币的数量是无限的</p>
+     * <p>动态规划，正向dp数组</p>
      *
      * @param coins
      * @param amount
@@ -1294,6 +1294,7 @@ public class Solution {
             dp[i] = amount + 1;
         }
         for (int i = 1; i < amount + 1; i++) {
+            // 非常重要：此处不能倒序遍历，因为每种硬币数量是无限的，所以可重复使用
             for (int coin : coins) {
                 if (i - coin >= 0) {
                     dp[i] = Math.min(dp[i], dp[i - coin] + 1);
@@ -1301,6 +1302,29 @@ public class Solution {
             }
         }
         return dp[amount] == amount + 1 ? -1 : dp[amount];
+    }
+
+    /**
+     * 零钱兑换
+     * <p>给定不同面额的硬币和一个总金额。写出函数来计算可以凑成总金额的硬币组合数。假设每一种面额的硬币有无限个。
+     * <p>动态规划，正向dp数组</p>
+     *
+     * @param amount
+     * @param coins
+     * @return
+     */
+    public int coinChange2(int amount, int[] coins) {
+        int[] dp = new int[amount + 1];
+        dp[0] = 1;
+        for (int coin : coins) {
+            // 非常重要：此处不能倒序遍历，因为每种硬币数量是无限的，所以可重复使用
+            for (int j = 1; j <= amount; j++) {
+                if (j - coin >= 0) {
+                    dp[j] += dp[j - coin];
+                }
+            }
+        }
+        return dp[amount];
     }
 
     /**
@@ -1359,7 +1383,7 @@ public class Solution {
 
     /**
      * 目标和
-     * <p>动态规划，背包问题</p>
+     * <p>动态规划，背包问题，反向dp数组</p>
      * <p>动态规划问题还是要分清“选择”</p>
      *
      * @param nums
@@ -1379,7 +1403,8 @@ public class Solution {
         int[] dp = new int[target + 1];
         dp[0] = 1;
         for (int i = 1; i <= nums.length; i++) {
-            for (int j = target; j >= 0; j--) { // 注意 j>=0
+            // 非常重要：此处需要倒序遍历，j>=0
+            for (int j = target; j >= 0; j--) {
                 if (j >= nums[i - 1]) {
                     dp[j] += dp[j - nums[i - 1]];
                 }
@@ -1463,6 +1488,7 @@ public class Solution {
         int max = 0;
         int[] dp = new int[nums.length];
         for (int i = 0; i < nums.length; i++) {
+            // 非常重要：此处需要倒序遍历，j>=0
             for (int j = i - 1; j >= 0; j--) {
                 if (nums[i] > nums[j]) {
                     dp[i] = Math.max(dp[i], dp[j]);
@@ -1712,6 +1738,6 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution s = new Solution();
-        System.out.println(s.longestPalindromeSubseq2("bbbab"));
+        System.out.println(s.canPartition2(new int[]{3, 3, 3, 4, 5}));
     }
 }
