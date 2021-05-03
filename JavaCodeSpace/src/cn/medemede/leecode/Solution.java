@@ -1736,6 +1736,64 @@ public class Solution {
         return dp[0][chars.length - 1];
     }
 
+    /**
+     * 无重叠区间，返回需要删除的最小区间数量
+     * <p>排序,贪心</p>
+     *
+     * @param intervals
+     * @return
+     */
+    public int eraseOverlapIntervals(int[][] intervals) {
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[1]));
+        int res = 0;
+        int right = intervals[0][0];
+        for (int[] x : intervals) {
+            if (x[0] >= right) {
+                right = x[1];
+            } else {
+                res++;
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 用最少数量的箭引爆气球
+     * <p>排序,贪心</p>
+     *
+     * @param points
+     * @return
+     */
+    public int findMinArrowShots(int[][] points) {
+        Arrays.sort(points, Comparator.comparingInt(a -> a[1]));
+        int res = 0;
+        int right = points[0][0];
+        for (int[] x : points) {
+            if (x[0] > right) {
+                res++;
+            }
+            right = x[1];
+        }
+        return res;
+    }
+
+    /**
+     * 跳跃游戏
+     * <p>经典贪心算法！！！记录可到达的最远位置即可</p>
+     *
+     * @param nums
+     * @return
+     */
+    public boolean canJump(int[] nums) {
+        int n = nums.length - 1;
+        int right = 0;
+        // 此处条件，right>=n时可直接返回ture，i<=right才可到达
+        for (int i = 0; right < n && i <= right; i++) {
+            right = Math.max(right, nums[i] + i);
+        }
+        return right >= n;
+    }
+
     public static void main(String[] args) {
         Solution s = new Solution();
         System.out.println(s.canPartition2(new int[]{3, 3, 3, 4, 5}));
