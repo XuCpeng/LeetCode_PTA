@@ -1794,8 +1794,226 @@ public class Solution {
         return right >= n;
     }
 
+    /**
+     * 跳跃游戏 II
+     * <p>贪心</p>
+     *
+     * @param nums
+     * @return
+     */
+    public int jump(int[] nums) {
+        int right = 0; //可跳的最远位置
+        int jumps = 0; //跳的步数
+        int end = 0; //上一步可达的最远位置
+
+        // 到达nums.length - 1就不再跳了，所以无需也不能计算nums.length - 1
+        for (int i = 0; i < nums.length - 1; i++) {
+            if (i + nums[i] > right) {
+                right = i + nums[i];
+            }
+            if (i == end) {
+                jumps++;
+                end = right;
+            }
+        }
+        return jumps;
+    }
+
+    /**
+     * 最小路径和
+     * <p>动态规划，递归，备忘录</p>
+     *
+     * @param grid
+     * @return
+     */
+    public int minPathSum(int[][] grid) {
+        memo = new int[grid.length][grid[0].length];
+        return getMinPathSum(grid, 0, 0);
+    }
+
+    private int getMinPathSum(int[][] grid, int i, int j) {
+        if (memo[i][j] != 0) {
+            return memo[i][j];
+        }
+        int val = grid[i][j];
+        if (i != grid.length - 1 && j != grid[0].length - 1) {
+            memo[i][j] = val + Math.min(getMinPathSum(grid, i + 1, j), getMinPathSum(grid, i, j + 1));
+        } else if (i != grid.length - 1) {
+            memo[i][j] = val + getMinPathSum(grid, i + 1, j);
+        } else if (j != grid[0].length - 1) {
+            memo[i][j] = val + getMinPathSum(grid, i, j + 1);
+        } else {
+            memo[i][j] = val;
+        }
+        return memo[i][j];
+    }
+
+    /**
+     * 最小路径和
+     * <p>动态规划，非递归，左上角正序</p>
+     *
+     * @param grid
+     * @return
+     */
+    public int minPathSum2(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] dp = new int[m][n];
+        dp[0][0] = grid[0][0];
+        for (int i = 1; i < m; i++) {
+            dp[i][0] = dp[i - 1][0] + grid[i][0];
+        }
+        for (int i = 1; i < n; i++) {
+            dp[0][i] = dp[0][i - 1] + grid[0][i];
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = grid[i][j] + Math.min(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+    /**
+     * 地下城游戏
+     * <p>动态规划，右下角倒序</p>
+     *
+     * @param dungeon
+     * @return
+     */
+    public int calculateMinimumHP(int[][] dungeon) {
+        int m = dungeon.length;
+        int n = dungeon[0].length;
+        int[][] dp = new int[m][n];
+        if (dungeon[m - 1][n - 1] < 0) {
+            dp[m - 1][n - 1] = 1 - dungeon[m - 1][n - 1];
+        } else {
+            dp[m - 1][n - 1] = 1;
+        }
+        for (int i = m - 2; i >= 0; i--) {
+            int need = dungeon[i][n - 1] - dp[i + 1][n - 1];
+            if (need < 0) {
+                dp[i][n - 1] = -need;
+            } else {
+                dp[i][n - 1] = 1;
+            }
+        }
+        for (int i = n - 2; i >= 0; i--) {
+            int need = dungeon[m - 1][i] - dp[m - 1][i + 1];
+            if (need < 0) {
+                dp[m - 1][i] = -need;
+            } else {
+                dp[m - 1][i] = 1;
+            }
+        }
+        for (int i = m - 2; i >= 0; i--) {
+            for (int j = n - 2; j >= 0; j--) {
+                int need = dungeon[i][j] - Math.min(dp[i + 1][j], dp[i][j + 1]);
+                if (need < 0) {
+                    dp[i][j] = -need;
+                } else {
+                    dp[i][j] = 1;
+                }
+            }
+        }
+        return dp[0][0];
+    }
+
+    /**
+     * 地下城游戏
+     * <p>动态规划，递归，备忘录</p>
+     *
+     * @param dungeon
+     * @return
+     */
+    public int calculateMinimumHP2(int[][] dungeon) {
+        this.memo = new int[dungeon.length][dungeon[0].length];
+        return getCalculateMinimumHP2(dungeon, 0, 0);
+    }
+
+    private int getCalculateMinimumHP2(int[][] dungeon, int i, int j) {
+        if (memo[i][j] != 0) {
+            return memo[i][j];
+        }
+        int next = 1;
+        if (i != dungeon.length - 1 && j != dungeon[0].length - 1) {
+            next = Math.min(getCalculateMinimumHP2(dungeon, i + 1, j), getCalculateMinimumHP2(dungeon, i, j + 1));
+        } else if (i != dungeon.length - 1) {
+            next = getCalculateMinimumHP2(dungeon, i + 1, j);
+        } else if (j != dungeon[0].length - 1) {
+            next = getCalculateMinimumHP2(dungeon, i, j + 1);
+        }
+        int need = dungeon[i][j] - next;
+        if (need < 0) {
+            memo[i][j] = -need;
+        } else {
+            memo[i][j] = 1;
+        }
+        return memo[i][j];
+    }
+
+    /**
+     * 自由之路
+     * <p>动态规划，递归</p>
+     */
+    char[] rings;
+    char[] keys;
+    HashMap<Character, ArrayList<Integer>> charToIndex;
+
+    public int findRotateSteps(String ring, String key) {
+        this.rings = ring.toCharArray();
+        this.keys = key.toCharArray();
+        this.memo = new int[rings.length][keys.length];
+        this.charToIndex = new HashMap<>();
+        for (int[] x : memo) {
+            Arrays.fill(x, -1);
+        }
+        for (int i = 0; i < rings.length; i++) {
+            charToIndex.computeIfAbsent(rings[i], k -> new ArrayList<>());
+            charToIndex.get(rings[i]).add(i);
+        }
+        return getFindRotateSteps(0, 0);
+    }
+
+    private int getFindRotateSteps(int i, int j) {
+        if (memo[i][j] != -1) {
+            return memo[i][j];
+        }
+        int minSteps = Integer.MAX_VALUE;
+        ArrayList<Integer> targetIndex = charToIndex.get(keys[j]);
+
+        if (j == keys.length - 1) {
+            for (Integer index : targetIndex) {
+                int dis = findRotateStepsDistance(i, index);
+                if (dis < minSteps) {
+                    minSteps = dis;
+                }
+            }
+            memo[i][j] = minSteps + 1;
+            return memo[i][j];
+        }
+
+        for (Integer index : targetIndex) {
+            int dis = findRotateStepsDistance(i, index) + getFindRotateSteps(index, j + 1);
+            if (dis < minSteps) {
+                minSteps = dis;
+            }
+        }
+
+        memo[i][j] = minSteps + 1;
+        return memo[i][j];
+    }
+
+    private int findRotateStepsDistance(int i, int j) {
+        return Math.min((i - j + rings.length) % rings.length, (j - i + rings.length) % rings.length);
+    }
+
+    public boolean isMatch(String s, String p) {
+
+    }
+
     public static void main(String[] args) {
         Solution s = new Solution();
-        System.out.println(s.canPartition2(new int[]{3, 3, 3, 4, 5}));
+        System.out.println(s.isMatch("mississippi", "mis*is*p*."));
     }
 }
