@@ -139,7 +139,8 @@ public class Solution {
         boolean[][] dp = new boolean[nums.length][count + 1];
         for (int i = 0; i < nums.length; i++) {
             if (nums[i] <= count) {
-                dp[i][nums[i]] = true; //物品i肯定能恰好装满重量为nums[i]的背包
+                //物品i肯定能恰好装满重量为nums[i]的背包
+                dp[i][nums[i]] = true;
             }
         }
         for (int i = 1; i < nums.length; i++) {
@@ -1802,9 +1803,12 @@ public class Solution {
      * @return
      */
     public int jump(int[] nums) {
-        int right = 0; //可跳的最远位置
-        int jumps = 0; //跳的步数
-        int end = 0; //上一步可达的最远位置
+        //可跳的最远位置
+        int right = 0;
+        //跳的步数
+        int jumps = 0;
+        //上一步可达的最远位置
+        int end = 0;
 
         // 到达nums.length - 1就不再跳了，所以无需也不能计算nums.length - 1
         for (int i = 0; i < nums.length - 1; i++) {
@@ -2020,11 +2024,14 @@ public class Solution {
     public boolean isMatch(String s, String p) {
         this.sChars = s.toCharArray();
         this.pChars = p.toCharArray();
-        this.memo = new int[sChars.length][pChars.length];
+        this.memo = new int[sChars.length + 1][pChars.length + 1];
         return getIsMatch(0, 0) == 1;
     }
 
     private int getIsMatch(int i, int j) {
+        if (memo[i][j] != 0) {
+            return memo[i][j];
+        }
         if (i == sChars.length || j == pChars.length) {
             if (i != sChars.length) {
                 return 2;
@@ -2034,11 +2041,6 @@ public class Solution {
             }
             return j == pChars.length ? 1 : 2;
         }
-
-        if (memo[i][j] != 0) {
-            return memo[i][j];
-        }
-
         if (j + 1 < pChars.length && pChars[j + 1] == '*') {
             memo[i][j] = getIsMatch(i, j + 2);
             if (memo[i][j] == 2 && (sChars[i] == pChars[j] || pChars[j] == '.')) {
@@ -2052,8 +2054,156 @@ public class Solution {
         return memo[i][j];
     }
 
+    /**
+     * 鸡蛋掉落
+     * <p>最基本的方法：动态规划，递归，备忘录。超时！</p>
+     * <p>可行的方法：动态规划，递归，备忘录，二分搜索。</p>
+     *
+     * @param k
+     * @param n
+     * @return
+     */
+    public int superEggDrop(int k, int n) {
+        this.memo = new int[k + 1][n + 1];
+        return getSuperEggDrop(k, n);
+    }
+
+    private int getSuperEggDrop(int k, int n) {
+        if (k == 1) {
+            return n;
+        }
+        if (n == 0) {
+            return 0;
+        }
+        if (memo[k][n] != 0) {
+            return memo[k][n];
+        }
+        int left = 1;
+        int right = n;
+        int steps = Integer.MAX_VALUE;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            // 当前层碎了，鸡蛋-1，向下搜索
+            int a = getSuperEggDrop(k - 1, mid - 1);
+            // 当前层没碎，鸡蛋数不变，向上搜索
+            int b = getSuperEggDrop(k, n - mid);
+            if (a > b) {
+                right = mid - 1;
+                steps = Math.min(steps, a + 1);
+            } else {
+                left = mid + 1;
+                steps = Math.min(steps, b + 1);
+            }
+        }
+        memo[k][n] = steps;
+        return memo[k][n];
+    }
+
+    /**
+     * 鸡蛋掉落
+     * <p>高级方法：动态规划，dp数组。</p>
+     * <p>dp[k][m] = n，当前有 k 个鸡蛋，可以尝试扔 m 次鸡蛋，最坏情况下最多能确切测试一栋 n 层的楼。</p>
+     *
+     * @param k
+     * @param n
+     * @return
+     */
+    public int superEggDrop2(int k, int n) {
+        int[][] dp = new int[k + 1][n + 1];
+        int i = 0;
+        while (dp[k][i] < n) {
+            i++;
+            for (int j = 1; j <= k; j++) {
+                dp[j][i] = dp[j][i - 1] + dp[j - 1][i - 1] + 1;
+            }
+        }
+        return i;
+    }
+
+    /**
+     * 鸡蛋掉落
+     * <p>高级方法：动态规划，dp数组，状态压缩。</p>
+     * <p>dp[k] = n，当前有 k 个鸡蛋，可以尝试扔"当前次"(下面代码中为i次)鸡蛋，最坏情况下最多能确切测试一栋 n 层的楼。</p>
+     *
+     * @param k
+     * @param n
+     * @return
+     */
+    public int superEggDrop3(int k, int n) {
+        int[] dp = new int[k + 1];
+        int i = 0;
+        while (dp[k] < n) {
+            i++;
+            for (int j = k; j > 0; j--) {
+                dp[j] = dp[j] + dp[j - 1] + 1;
+            }
+        }
+        return i;
+    }
+
+    /**
+     * 戳气球
+     * <p>递归，备忘录，两侧添加虚拟气球</p>
+     */
+    int[] nums;
+
+    public int maxCoins(int[] nums) {
+        this.memo = new int[nums.length + 2][nums.length + 2];
+        for (int[] x : memo) {
+            Arrays.fill(x, -1);
+        }
+        this.nums = new int[nums.length + 2];
+        this.nums[0] = 1;
+        this.nums[nums.length + 1] = 1;
+        System.arraycopy(nums, 0, this.nums, 1, nums.length);
+        return getMaxCoins(0, nums.length + 1);
+    }
+
+    private int getMaxCoins(int i, int j) {
+        int val = nums[i] * nums[j];
+        if (i + 2 == j) {
+            return val * nums[i + 1];
+        }
+        if (memo[i][j] != -1) {
+            return memo[i][j];
+        }
+        int maxVal = 0;
+        // 最后戳破气球k时最大
+        for (int k = i + 1; k < j; k++) {
+            int tmpVal = getMaxCoins(i, k) + getMaxCoins(k, j) + val * nums[k];
+            if (tmpVal > maxVal) {
+                maxVal = tmpVal;
+            }
+        }
+        memo[i][j] = maxVal;
+        return maxVal;
+    }
+
+    /**
+     * 戳气球
+     * <p>非递归，dp数组，完全根据上面的递归方法改写</p>
+     */
+    public int maxCoins2(int[] nums) {
+        int[][] dp = new int[nums.length + 2][nums.length + 2];
+        int[] newNums = new int[nums.length + 2];
+        newNums[0] = 1;
+        newNums[nums.length + 1] = 1;
+        for (int i = 0; i < nums.length; i++) {
+            newNums[i + 1] = nums[i];
+        }
+        for (int i = nums.length; i >= 0; i--) {
+            for (int j = i + 1; j <= nums.length + 1; j++) {
+                for (int k = i + 1; k < j; k++) {
+                    // i<k<j, 所以dp[i][k]在dp[i][j]同一行左侧，dp[k][j]在dp[i][j]同一列下侧
+                    dp[i][j] = Math.max(dp[i][j], dp[i][k] + dp[k][j] + newNums[i] * newNums[k] * newNums[j]);
+                }
+            }
+        }
+        return dp[0][nums.length + 1];
+    }
+
     public static void main(String[] args) {
         Solution s = new Solution();
-        System.out.println(s.isMatch("aa", "a*"));
+        System.out.println(s.maxCoins2(new int[]{3, 1, 5, 8}));
     }
 }
