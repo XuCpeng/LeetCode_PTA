@@ -2181,7 +2181,7 @@ public class Solution {
 
     /**
      * 戳气球
-     * <p>非递归，dp数组，完全根据上面的递归方法改写</p>
+     * <p>非递归，dp数组，两侧添加虚拟气球，完全根据上面的递归方法改写</p>
      */
     public int maxCoins2(int[] nums) {
         int[][] dp = new int[nums.length + 2][nums.length + 2];
@@ -2202,8 +2202,299 @@ public class Solution {
         return dp[0][nums.length + 1];
     }
 
+    /**
+     * 石子游戏
+     * <p>自己想的方法：递归，每次统计两个人的选择结果，返回先手优势最大的分数</p>
+     *
+     * @param piles
+     * @return
+     */
+    public boolean stoneGame(int[] piles) {
+        this.memo = new int[piles.length][piles.length];
+        for (int[] x : memo) {
+            Arrays.fill(x, Integer.MAX_VALUE);
+        }
+        return getStoneGame(piles, 0, piles.length - 1) > 0;
+    }
+
+    private int getStoneGame(int[] piles, int i, int j) {
+        if (i > j) {
+            return 0;
+        }
+        if (memo[i][j] != Integer.MAX_VALUE) {
+            return memo[i][j];
+        }
+        int a = Math.abs(piles[i] - piles[j]) + getStoneGame(piles, i + 1, j - 1);
+        int b = piles[i] - piles[i + 1] + getStoneGame(piles, i + 2, j);
+        int c = piles[j] - piles[j - 1] + getStoneGame(piles, i, j - 2);
+        memo[i][j] = Math.max(a, Math.max(b, c));
+        return memo[i][j];
+    }
+
+    /**
+     * 石子游戏
+     * <p>自己想的方法：dp数组，每次统计两个人的选择结果，返回先手优势最大的分数。完全根据上面的递归修改</p>
+     *
+     * @param piles
+     * @return
+     */
+    public boolean stoneGame2(int[] piles) {
+        int[][] dp = new int[piles.length][piles.length];
+
+        for (int i = piles.length - 3; i >= 0; i--) {
+            for (int j = 2; j < piles.length; j++) {
+                int a = Math.abs(piles[i] - piles[j]) + dp[i + 1][j - 1];
+                int b = piles[i] - piles[i + 1] + dp[i + 2][j];
+                int c = piles[j] - piles[j - 1] + dp[i][j - 2];
+                dp[i][j] = Math.max(a, Math.max(b, c));
+            }
+        }
+        return dp[0][piles.length - 1] > 0;
+    }
+
+    /**
+     * 石子游戏
+     * <p>官方解法：dp数组，每次统计一个人的选择结果，返回石子数量之差。还可继续压缩状态</p>
+     *
+     * @param piles
+     * @return
+     */
+    public boolean stoneGame3(int[] piles) {
+        int length = piles.length;
+        int[][] dp = new int[length][length];
+        for (int i = 0; i < length; i++) {
+            dp[i][i] = piles[i];
+        }
+        for (int i = length - 2; i >= 0; i--) {
+            for (int j = i + 1; j < length; j++) {
+                dp[i][j] = Math.max(piles[i] - dp[i + 1][j], piles[j] - dp[i][j - 1]);
+            }
+        }
+        return dp[0][length - 1] > 0;
+    }
+
+
+    /**
+     * 搜索旋转排序数组
+     * <p>无重复元素，关键：确定[i,j]之间的有序部分，其他不要多想</p>
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int search(int[] nums, int target) {
+        int i = 0;
+        int j = nums.length;
+        if (target == nums[0]) {
+            return 0;
+        }
+        if (target == nums[nums.length - 1]) {
+            return nums.length - 1;
+        }
+        while (i < j) {
+            int mid = (i + j) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            }
+            if (nums[mid] > nums[0]) {
+                if (target > nums[0] && target < nums[mid]) {
+                    j = mid;
+                } else {
+                    i = mid + 1;
+                }
+            } else {
+                if (target < nums[0] && target > nums[mid]) {
+                    i = mid + 1;
+                } else {
+                    j = mid;
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 搜索旋转排序数组 II
+     * <p>有重复元素，当nums[mid]==nums[i]==nums[j]时无法判断有序部分，i++,j--</p>
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public boolean search2(int[] nums, int target) {
+        int i = 0;
+        int j = nums.length;
+        if (target == nums[0] || target == nums[nums.length - 1]) {
+            return true;
+        }
+
+        while (i < j) {
+            int mid = (i + j) / 2;
+            if (nums[mid] == target) {
+                return true;
+            }
+
+            if (nums[i] == nums[mid] && nums[i] == nums[j - 1]) {
+                i++;
+                j--;
+            } else if (nums[i] <= nums[mid]) {
+                // 左侧有序
+                if (target >= nums[i] && target < nums[mid]) {
+                    j = mid;
+                } else {
+                    i = mid + 1;
+                }
+            } else {
+                // 右侧有序
+                if (target <= nums[j - 1] && target > nums[mid]) {
+                    i = mid + 1;
+                } else {
+                    j = mid;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 买卖股票的最佳时机
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit(int[] prices) {
+        if (prices.length < 2) {
+            return 0;
+        }
+        int minPrice = prices[0];
+        int max = 0;
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] - minPrice > max) {
+                max = prices[i] - minPrice;
+            } else if (prices[i] < minPrice) {
+                minPrice = prices[i];
+            }
+        }
+        return max;
+    }
+
+    /**
+     * 买卖股票的最佳时机 II
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit2(int[] prices) {
+        int profit = 0;
+        int i = 0;
+        while (i < prices.length) {
+            while (i + 1 < prices.length && prices[i + 1] <= prices[i]) {
+                i++;
+            }
+            int j = i + 1;
+            while (j + 1 < prices.length && prices[j + 1] >= prices[j]) {
+                j++;
+            }
+            if (i < prices.length && j < prices.length) {
+                profit += prices[j] - prices[i];
+            }
+            i = j + 1;
+        }
+        return profit;
+    }
+
+    /**
+     * 买卖股票的最佳时机 III
+     * <p>
+     * base case：
+     * dp[-1][k][0] = dp[i][0][0] = 0
+     * dp[-1][k][1] = dp[i][0][1] = -infinity
+     * <p>
+     * 状态转移方程：
+     * dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1] + prices[i])
+     * dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i])
+     *
+     * @param prices
+     * @return
+     */
+
+    public int maxProfit30(int[] prices) {
+        int[][][] dp = new int[prices.length][3][2];
+        dp[0][1][1] = -prices[0];
+        dp[0][2][1] = -prices[0];
+        for (int i = 1; i < prices.length; i++) {
+            dp[i][1][0] = Math.max(dp[i - 1][1][0], dp[i - 1][1][1] + prices[i]);
+            dp[i][1][1] = Math.max(dp[i - 1][1][1], -prices[i]);
+
+            dp[i][2][0] = Math.max(dp[i - 1][2][0], dp[i - 1][2][1] + prices[i]);
+            dp[i][2][1] = Math.max(dp[i - 1][2][1], dp[i - 1][1][0] - prices[i]);
+        }
+        return dp[prices.length - 1][2][0];
+    }
+
+    public int maxProfit31(int[] prices) {
+        int dpi10 = 0;
+        int dpi11 = -prices[0];
+        int dpi20 = 0;
+        int dpi21 = -prices[0];
+        for (int i = 1; i < prices.length; i++) {
+            int tmp = dpi10;
+            dpi10 = Math.max(dpi10, dpi11 + prices[i]);
+            dpi11 = Math.max(dpi11, -prices[i]);
+            dpi20 = Math.max(dpi20, dpi21 + prices[i]);
+            dpi21 = Math.max(dpi21, tmp - prices[i]);
+        }
+        return dpi20;
+    }
+
+    /**
+     * 买卖股票的最佳时机+冷冻期
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit4(int[] prices) {
+        if (prices.length < 2) {
+            return 0;
+        }
+        int dpi0 = Math.max(0, prices[1] - prices[0]);
+        int dpi1 = Math.max(-prices[0], -prices[1]);
+        int dpi20 = 0;
+        for (int i = 2; i < prices.length; i++) {
+            int tmp = dpi0;
+            dpi0 = Math.max(dpi0, dpi1 + prices[i]);
+
+            // 即dp[i][1] = Math.max(dp[i - 1][1], dp[i - 2][0] - prices[i]);
+            dpi1 = Math.max(dpi1, dpi20 - prices[i]);
+
+            dpi20 = tmp;
+        }
+        return dpi0;
+    }
+
+    /**
+     * 买卖股票的最佳时机+手续费
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit5(int[] prices, int fee) {
+        if (prices.length < 2) {
+            return 0;
+        }
+
+        int dpi0 = 0;
+        int dpi1 = -prices[0];
+
+        for (int i = 1; i < prices.length; i++) {
+            dpi0 = Math.max(dpi0, dpi1 + prices[i] - fee);
+            dpi1 = Math.max(dpi1, dpi0 - prices[i]);
+        }
+        return dpi0;
+    }
+
     public static void main(String[] args) {
         Solution s = new Solution();
-        System.out.println(s.maxCoins2(new int[]{3, 1, 5, 8}));
+        System.out.println(s.search2(new int[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1}, 2));
     }
 }
