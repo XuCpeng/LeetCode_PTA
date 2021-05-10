@@ -2527,8 +2527,136 @@ public class Solution {
         return dpi0;
     }
 
+    /**
+     * 打家劫舍，相连房间触发警报
+     * <p>
+     * dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
+     *
+     * @param nums
+     * @return
+     */
+    public int rob(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        if (nums.length < 2) {
+            return nums[0];
+        }
+
+        int a = nums[0];
+        int b = Math.max(nums[0], nums[1]);
+        for (int i = 2; i < nums.length; i++) {
+            int tmp = b;
+            b = Math.max(b, a + nums[i]);
+            a = tmp;
+        }
+        return b;
+    }
+
+    /**
+     * 打家劫舍 II，环形
+     *
+     * @param nums
+     * @return
+     */
+    public int rob2(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        if (nums.length < 2) {
+            return nums[0];
+        }
+        int res;
+
+        int a = nums[0];
+        int b = Math.max(nums[0], nums[1]);
+        for (int i = 2; i < nums.length - 1; i++) {
+            int tmp = b;
+            b = Math.max(b, a + nums[i]);
+            a = tmp;
+        }
+        res = b;
+
+        a = 0;
+        b = nums[1];
+        for (int i = 2; i < nums.length; i++) {
+            int tmp = b;
+            b = Math.max(b, a + nums[i]);
+            a = tmp;
+        }
+        res = Math.max(b, res);
+
+        return res;
+    }
+
+    /**
+     * 打家劫舍 Ⅲ，树形
+     * <p>返回二元组，表示选择与非选择</p>
+     *
+     * @param nums
+     * @return
+     */
+    public int rob3(TreeNode root) {
+        int[] res = getRob3(root);
+        return Math.max(res[0], res[1]);
+    }
+
+    private int[] getRob3(TreeNode node) {
+        if (node == null) {
+            return new int[]{0, 0};
+        }
+        int[] a = getRob3(node.left);
+        int[] b = getRob3(node.right);
+        return new int[]{Math.max(a[0], a[1]) + Math.max(b[0], b[1]), node.val + a[0] + b[0]};
+    }
+
+    /**
+     * 实现 strStr()
+     * <p>KMP算法</p>
+     *
+     * @param haystack
+     * @param needle
+     * @return
+     */
+    public int strStr(String haystack, String needle) {
+        if (needle.isEmpty()) {
+            return 0;
+        }
+        char[] haystackChars = haystack.toCharArray();
+        char[] needleChars = needle.toCharArray();
+        int[] pat = new int[needleChars.length];
+        int i;
+        int j;
+        for (i = 1, j = 0; i < needleChars.length; i++) {
+            while (j > 0 && needleChars[i] != needleChars[j]) {
+                j = pat[j - 1];
+            }
+            if (needleChars[i] == needleChars[j]) {
+                j++;
+            }
+            pat[i] = j;
+        }
+        for (i = 0, j = 0; i < haystackChars.length && j < needleChars.length; i++) {
+            while (j > 0 && haystackChars[i] != needleChars[j]) {
+                j = pat[j - 1];
+            }
+
+            // 到达这个地方只有两种情况：1. haystackChars[i] == needleChars[j] 2. haystackChars[i] != needleChars[j],j==0
+            // haystackChars[i] == needleChars[j]时，无论j是否为0是肯定要+1的，因为该字符已经匹配上了，所以匹配下一个字符
+            // j=0时还不相等，haystackChars[i]就没有比较的必要了，所以下一个字符从头比较，j又恰好为0，所以无需处理
+            if (haystackChars[i] == needleChars[j]) {
+                j++;
+            }
+        }
+        if (j == needleChars.length) {
+            return i - needleChars.length;
+        } else {
+            return -1;
+        }
+    }
+
     public static void main(String[] args) {
         Solution s = new Solution();
-        System.out.println(s.search2(new int[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1}, 2));
+        System.out.println(s.strStr("missiissippi", "issip"));
     }
 }
