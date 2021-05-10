@@ -2357,7 +2357,7 @@ public class Solution {
     }
 
     /**
-     * 买卖股票的最佳时机
+     * 买卖股票的最佳时机，一次
      *
      * @param prices
      * @return
@@ -2379,7 +2379,7 @@ public class Solution {
     }
 
     /**
-     * 买卖股票的最佳时机 II
+     * 买卖股票的最佳时机，无限次
      *
      * @param prices
      * @return
@@ -2404,7 +2404,7 @@ public class Solution {
     }
 
     /**
-     * 买卖股票的最佳时机 III
+     * 买卖股票的最佳时机，两次
      * <p>
      * base case：
      * dp[-1][k][0] = dp[i][0][0] = 0
@@ -2448,12 +2448,46 @@ public class Solution {
     }
 
     /**
-     * 买卖股票的最佳时机+冷冻期
+     * 买卖股票的最佳时机，K次
+     * <p>
+     * 状态转移方程：
+     * dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1] + prices[i])
+     * dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i])
      *
      * @param prices
      * @return
      */
-    public int maxProfit4(int[] prices) {
+    public int maxProfit4(int k, int[] prices) {
+        if (prices.length < 2 || k < 1) {
+            return 0;
+        }
+        int[][][] dp = new int[prices.length][k][2];
+
+        // base case: i==0时（即第一天时），若持有股票只能是-prices[0]
+        for (int j = 0; j < k; j++) {
+            dp[0][j][1] = -prices[0];
+        }
+        for (int i = 1; i < prices.length; i++) {
+            for (int j = 0; j < k; j++) {
+                dp[i][j][0] = Math.max(dp[i - 1][j][0], dp[i - 1][j][1] + prices[i]);
+                if (j == 0) {
+                    // base case: dp[i>0][0][1]时(非第一天，第一次买卖，且持有)
+                    dp[i][0][1] = Math.max(dp[i - 1][0][1], -prices[i]);
+                } else {
+                    dp[i][j][1] = Math.max(dp[i - 1][j][1], dp[i - 1][j - 1][0] - prices[i]);
+                }
+            }
+        }
+        return dp[prices.length - 1][k - 1][0];
+    }
+
+    /**
+     * 买卖股票的最佳时机+冷冻期，无限次
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit5(int[] prices) {
         if (prices.length < 2) {
             return 0;
         }
@@ -2473,12 +2507,12 @@ public class Solution {
     }
 
     /**
-     * 买卖股票的最佳时机+手续费
+     * 买卖股票的最佳时机+手续费，无限次
      *
      * @param prices
      * @return
      */
-    public int maxProfit5(int[] prices, int fee) {
+    public int maxProfit6(int[] prices, int fee) {
         if (prices.length < 2) {
             return 0;
         }
