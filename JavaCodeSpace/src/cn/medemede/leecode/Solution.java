@@ -2655,6 +2655,180 @@ public class Solution {
         }
     }
 
+    /**
+     * 让字符串成为回文串的最少插入次数
+     * <p>递归，备忘录</p>
+     */
+    char[] ss;
+
+    public int minInsertions(String s) {
+        this.ss = s.toCharArray();
+        this.memo = new int[ss.length][ss.length];
+        return getMinInsertions(0, ss.length - 1);
+    }
+
+    private int getMinInsertions(int i, int j) {
+        if (i >= j) {
+            return 0;
+        }
+        if (memo[i][j] != 0) {
+            return memo[i][j];
+        }
+        if (ss[i] == ss[j]) {
+            memo[i][j] = getMinInsertions(i + 1, j - 1);
+        } else {
+            memo[i][j] = Math.min(getMinInsertions(i + 1, j), getMinInsertions(i, j - 1)) + 1;
+        }
+
+        return memo[i][j];
+    }
+
+    /**
+     * 让字符串成为回文串的最少插入次数
+     * <p>dp数组</p>
+     */
+    public int minInsertions2(String s) {
+        char[] ss = s.toCharArray();
+        int[][] dp = new int[ss.length][ss.length];
+        for (int i = ss.length - 2; i >= 0; i--) {
+            for (int j = i + 1; j < ss.length; j++) {
+                if (ss[i] == ss[j]) {
+                    dp[i][j] = dp[i + 1][j - 1];
+                } else {
+                    dp[i][j] = Math.min(dp[i + 1][j], dp[i][j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0][ss.length - 1];
+    }
+
+    /**
+     * 全排列
+     * <p>回溯，标记数组，保序</p>
+     *
+     * @param nums
+     * @return
+     */
+    List<List<Integer>> res;
+    boolean[] flag;
+
+    public List<List<Integer>> permute(int[] nums) {
+        this.res = new LinkedList<>();
+        this.flag = new boolean[nums.length];
+        LinkedList<Integer> track = new LinkedList<>();
+        getPermute(nums, track);
+        return res;
+    }
+
+    private void getPermute(int[] nums, LinkedList<Integer> track) {
+        if (track.size() == nums.length) {
+            res.add(new LinkedList<>(track));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (!flag[i]) {
+                track.addLast(nums[i]);
+                flag[i] = true;
+                getPermute(nums, track);
+                track.removeLast();
+                flag[i] = false;
+            }
+        }
+    }
+
+    /**
+     * 全排列
+     * <p>回溯，交换，不保序</p>
+     *
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> permute2(int[] nums) {
+        this.res = new LinkedList<>();
+        LinkedList<Integer> track = new LinkedList<>();
+        for (int x : nums) {
+            track.add(x);
+        }
+        getPermute2(0, track);
+        return res;
+    }
+
+    private void getPermute2(int i, LinkedList<Integer> track) {
+        if (track.size() == i) {
+            res.add(new LinkedList<>(track));
+            return;
+        }
+        for (int j = i; j < track.size(); j++) {
+            Collections.swap(track, i, j);
+            getPermute2(i + 1, track);
+            Collections.swap(track, i, j);
+        }
+    }
+
+    /**
+     * N 皇后
+     *
+     * @param n
+     * @return
+     */
+    List<List<String>> queens;
+    int n;
+
+    public List<List<String>> solveNQueens(int n) {
+        this.n = n;
+        this.queens = new ArrayList<>();
+        this.flag = new boolean[n];
+        getSolveNQueens(new ArrayList<>());
+        return queens;
+    }
+
+    private void getSolveNQueens(ArrayList<String> queen) {
+        if (queen.size() == n) {
+            queens.add(new ArrayList<>(queen));
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            sb.append('.');
+        }
+        for (int i = 0; i < n; i++) {
+            if (canSetQueen(i, queen)) {
+                sb.setCharAt(i, 'Q');
+                flag[i] = true;
+                queen.add(sb.toString());
+                getSolveNQueens(queen);
+                sb.setCharAt(i, '.');
+                flag[i] = false;
+                queen.remove(queen.size() - 1);
+            }
+        }
+    }
+
+    private boolean canSetQueen(int i, ArrayList<String> queen) {
+        if (flag[i]) {
+            return false;
+        }
+        int p = queen.size() - 1;
+        int q = i + 1;
+        while (p >= 0 && q < n) {
+            if (queen.get(p).charAt(q) == 'Q') {
+                return false;
+            }
+            p--;
+            q++;
+        }
+
+        p = queen.size() - 1;
+        q = i - 1;
+        while (p >= 0 && q >= 0) {
+            if (queen.get(p).charAt(q) == 'Q') {
+                return false;
+            }
+            p--;
+            q--;
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
         Solution s = new Solution();
         System.out.println(s.strStr("missiissippi", "issip"));
