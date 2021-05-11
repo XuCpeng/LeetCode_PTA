@@ -2592,9 +2592,6 @@ public class Solution {
     /**
      * 打家劫舍 Ⅲ，树形
      * <p>返回二元组，表示选择与非选择</p>
-     *
-     * @param nums
-     * @return
      */
     public int rob3(TreeNode root) {
         int[] res = getRob3(root);
