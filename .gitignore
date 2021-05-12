@@ -1,7 +1,6 @@
 .vscode/
 CppCodeSpace/.vscode/
 JavaCodeSpace/out
-JavaCodeSpace/out
 **/*.exe
-JavaCodeSpace/.idea/sonarlint 
-**/.DS_Store
+JavaCodeSpace/.idea/sonarlint
+.DS_Store
