@@ -2829,10 +2829,6 @@ public class Solution {
     /**
      * 划分为k个相等的子集
      * <p>官方解（错误）</p>
-     *
-     * @param nums
-     * @param k
-     * @return
      */
     boolean search(int used, int todo, Result[] memo, int[] nums, int target) {
         if (memo[used] == null) {
@@ -2978,14 +2974,14 @@ public class Solution {
 
 
     public void solveSudoku(char[][] board) {
-
+        getSolveSudoku(board,0);
     }
 
-    private void getSolveSudoku(char[][] board) {
-        int i;
-        int j = 0;
-        for (i = 0; i < 9; i++) {
-            for (j = 0; j < 9; j++) {
+    private boolean getSolveSudoku(char[][] board, int preI) {
+        int i = preI;
+        int j=0;
+        for (; i < 9; i++) {
+            for(j=0;j<9;j++){
                 if (board[i][j] == '.') {
                     break;
                 }
@@ -2996,25 +2992,73 @@ public class Solution {
         }
 
         if (i == 9 && j == 9) {
-            return;
+            return true;
         }
         for (int k = '1'; k <= '9'; k++) {
             if (canSetSudoku(k, i, j, board)) {
                 board[i][j] = (char) k;
-                getSolveSudoku(board);
-                board[i][j] = '.';
+                if (!getSolveSudoku(board, i)) {
+                    board[i][j] = '.';
+                } else {
+                    return true;
+                }
             }
         }
-
+        return false;
     }
+
 
     private boolean canSetSudoku(int k, int i, int j, char[][] board) {
         for (int l = 0; l < 9; l++) {
             if (board[i][l] == k || board[l][j] == k) {
                 return false;
             }
-
         }
+
+        int p = i;
+        int q;
+        while (p % 3 != 0) {
+            p--;
+            q = j;
+            if (board[p][q] == k) {
+                return false;
+            }
+            while (q % 3 != 0) {
+                q--;
+                if (board[p][q] == k) {
+                    return false;
+                }
+            }
+            q = j + 1;
+            while (q % 3 != 0) {
+                if (board[p][q] == k) {
+                    return false;
+                }
+                q++;
+            }
+        }
+        p = i + 1;
+        while (p % 3 != 0) {
+            q = j;
+            if (board[p][q] == k) {
+                return false;
+            }
+            while (q % 3 != 0) {
+                q--;
+                if (board[p][q] == k) {
+                    return false;
+                }
+            }
+            q = j + 1;
+            while (q % 3 != 0) {
+                if (board[p][q] == k) {
+                    return false;
+                }
+                q++;
+            }
+            p++;
+        }
+
         return true;
     }
 
