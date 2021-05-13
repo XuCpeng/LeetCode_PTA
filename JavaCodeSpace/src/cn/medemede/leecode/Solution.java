@@ -2948,8 +2948,78 @@ public class Solution {
     }
 
 
+    /**
+     * [1..n]的所有k个数的组合
+     *
+     * @param n
+     * @param k
+     * @return
+     */
+    public List<List<Integer>> combine(int n, int k) {
+        this.res = new ArrayList<>();
+        getCombine(n, k, 1, new LinkedList<>());
+        return res;
+    }
+
+    private void getCombine(int n, int k, int i, LinkedList<Integer> track) {
+        if (track.size() == k) {
+            res.add(new LinkedList<>(track));
+            return;
+        }
+        if (i > n || track.size() + (n - i) + 1 < k) {
+            return;
+        }
+
+        track.addLast(i);
+        getCombine(n, k, i + 1, track);
+        track.removeLast();
+        getCombine(n, k, i + 1, track);
+    }
+
+
+    public void solveSudoku(char[][] board) {
+
+    }
+
+    private void getSolveSudoku(char[][] board) {
+        int i;
+        int j = 0;
+        for (i = 0; i < 9; i++) {
+            for (j = 0; j < 9; j++) {
+                if (board[i][j] == '.') {
+                    break;
+                }
+            }
+            if (j < 9 && board[i][j] == '.') {
+                break;
+            }
+        }
+
+        if (i == 9 && j == 9) {
+            return;
+        }
+        for (int k = '1'; k <= '9'; k++) {
+            if (canSetSudoku(k, i, j, board)) {
+                board[i][j] = (char) k;
+                getSolveSudoku(board);
+                board[i][j] = '.';
+            }
+        }
+
+    }
+
+    private boolean canSetSudoku(int k, int i, int j, char[][] board) {
+        for (int l = 0; l < 9; l++) {
+            if (board[i][l] == k || board[l][j] == k) {
+                return false;
+            }
+
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
         Solution s = new Solution();
-        System.out.println(s.canPartitionKSubsets(new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3}, 8));
+        System.out.println(s.combine(4, 2));
     }
 }
