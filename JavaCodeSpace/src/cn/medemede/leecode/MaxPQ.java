@@ -51,14 +51,12 @@ public class MaxPQ<T extends Comparable<T>> {
     }
 
     public void sink(int k) {
-        int left = 2 * k;
-        int right = left + 1;
-        int target = less(left, right) ? right : left;
-        while (target <= last && less(k, target)) {
-            swap(target, k);
-            left = 2 * k;
-            right = left + 1;
-            target = less(left, right) ? right : left;
+        while (2 * k <= last) {
+            int target = 2 * k;
+            if (target < last && less(target, target + 1)) target++;
+            if (!less(k, target)) break;
+            swap(k, target);
+            k = target;
         }
     }
 
@@ -74,10 +72,12 @@ public class MaxPQ<T extends Comparable<T>> {
     }
 
     public static void main(String[] args) {
-        MaxPQ<Integer> maxPQ = new MaxPQ<>(3);
+        MaxPQ<Integer> maxPQ = new MaxPQ<>(5);
         maxPQ.push(1);
-        maxPQ.push(3);
         maxPQ.push(2);
+        maxPQ.push(3);
+        maxPQ.push(4);
+        maxPQ.push(5);
         System.out.println(maxPQ.peek() + " " + maxPQ.pop() + " " + maxPQ.pop() + " " + maxPQ.pop());
     }
 
