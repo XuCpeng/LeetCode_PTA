@@ -3141,6 +3141,7 @@ public class Solution {
     /**
      * 打开转盘锁
      * <p>广度优先遍历BFS，visited</p>
+     * <p>注意：一次搜索一层，除了用指针记录每层最后一个节点的方法，还可以事先记录队列的长度n，然后for</p>
      *
      * @param deadends
      * @param target
@@ -3262,8 +3263,119 @@ public class Solution {
     }
 
 
+    /**
+     * 滑动谜题
+     * <p>DFS，数组表示，慢。建议用字符串。</p>
+     *
+     * @param board
+     * @return
+     */
+    public int slidingPuzzle(int[][] board) {
+        ArrayList<Integer> oneBoard = new ArrayList<>();
+        for (int j = 0; j < 3; j++) {
+            oneBoard.add(board[0][j]);
+        }
+        for (int j = 0; j < 3; j++) {
+            oneBoard.add(board[1][j]);
+        }
+        LinkedList<ArrayList<Integer>> queue = new LinkedList<>();
+        queue.add(oneBoard);
+
+        ArrayList<ArrayList<Integer>> mapping = new ArrayList<>();
+        mapping.add(new ArrayList<>(Arrays.asList(1, 3)));
+        mapping.add(new ArrayList<>(Arrays.asList(0, 2, 4)));
+        mapping.add(new ArrayList<>(Arrays.asList(1, 5)));
+        mapping.add(new ArrayList<>(Arrays.asList(0, 4)));
+        mapping.add(new ArrayList<>(Arrays.asList(1, 3, 5)));
+        mapping.add(new ArrayList<>(Arrays.asList(2, 4)));
+
+        ArrayList<ArrayList<Integer>> visited = new ArrayList<>();
+        visited.add(oneBoard);
+
+        int res = 0;
+        while (!queue.isEmpty()) {
+            int n = queue.size();
+            for (int i = 0; i < n; i++) {
+                ArrayList<Integer> aBoard = queue.pollFirst();
+                if (isPuzzle(aBoard)) {
+                    return res;
+                }
+                int zero = zeroIndex(aBoard);
+                for (int x : mapping.get(zero)) {
+                    ArrayList<Integer> tmp = new ArrayList<>(aBoard);
+                    Collections.swap(tmp, zero, x);
+                    if (!containPuzzle(visited, tmp)) {
+                        queue.addLast(tmp);
+                        visited.add(tmp);
+                    }
+                }
+            }
+            res++;
+        }
+
+        return -1;
+    }
+
+    private boolean isPuzzle(ArrayList<Integer> oneBoard) {
+        for (int i = 0; i < 5; i++) {
+            if (oneBoard.get(i) != i + 1) {
+                return false;
+            }
+        }
+        return oneBoard.get(5) == 0;
+    }
+
+    private int zeroIndex(ArrayList<Integer> aBoard) {
+        for (int i = 0; i < 6; i++) {
+            if (aBoard.get(i) == 0) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private boolean containPuzzle(ArrayList<ArrayList<Integer>> visited, ArrayList<Integer> a) {
+        for (ArrayList<Integer> x : visited) {
+            if (equalPuzzle(x, a)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean equalPuzzle(ArrayList<Integer> a, ArrayList<Integer> b) {
+        for (int i = 0; i < 6; i++) {
+            if (!a.get(i).equals(b.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * 位1的个数
+     * <p>n&(n-1)可消除n的最后一位1
+     *
+     * @param n
+     * @return
+     */
+    public int hammingWeight(int n) {
+        int res = 0;
+        while (n != 0) {
+            res++;
+            n = n & (n - 1);
+        }
+        return res;
+    }
+
+    public boolean isPowerOfTwo(int n) {
+        if (n <= 0) return false;
+        return (n & (n - 1)) == 0;
+    }
+
     public static void main(String[] args) {
         Solution s = new Solution();
-        System.out.println(s.openLock2(new String[]{"0201", "0101", "0102", "1212", "2002"}, "0202"));
+        System.out.println(s.slidingPuzzle(new int[][]{{3, 2, 4}, {1, 5, 0}}));
     }
 }
