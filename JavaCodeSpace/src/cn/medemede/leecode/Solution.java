@@ -3266,6 +3266,7 @@ public class Solution {
     /**
      * 滑动谜题
      * <p>DFS，数组表示，慢。建议用字符串。</p>
+     * <p>预先处理并记录状态转移矩阵</p>
      *
      * @param board
      * @return
@@ -3588,8 +3589,57 @@ public class Solution {
         return res;
     }
 
+    /**
+     * 找到所有数组中消失的数字
+     * <p>利用原数组及其索引做 hash 表，用数组长度做标记</p>
+     *
+     * @param nums
+     * @return
+     */
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        ArrayList<Integer> res = new ArrayList<>();
+        int n = nums.length;
+        for (int x : nums) {
+            nums[(x - 1) % n] += n;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] <= n) {
+                res.add(i + 1);
+            }
+        }
+        return res;
+    }
+
+
+    /**
+     * 错误的集合
+     * <p>利用原数组及其索引做 hash 表，用数组长度做标记</p>
+     *
+     * @param nums
+     * @return
+     */
+    public int[] findErrorNums(int[] nums) {
+        int a = 0;
+        int b = 0;
+        int n = nums.length;
+        for (int x : nums) {
+            nums[(x - 1) % n] += n;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] <= n) {
+                a = i + 1;
+            } else if (nums[i] > 2 * n) {
+                b = i + 1;
+            }
+        }
+        return new int[]{b, a};
+    }
+
+
+
+
     public static void main(String[] args) {
         Solution s = new Solution();
-        System.out.println(s.superPow(2147483647, new int[]{2, 0, 0}));
+        System.out.println(s.findDisappearedNumbers(new int[]{4, 3, 2, 7, 8, 2, 3, 1}));
     }
 }
