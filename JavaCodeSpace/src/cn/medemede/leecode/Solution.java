@@ -1222,23 +1222,10 @@ public class Solution {
      * @param nums
      */
     public void moveZeroes(int[] nums) {
-        int i = 0;
-        while (i < nums.length) {
-            if (nums[i] == 0) {
-                break;
-            }
-            i++;
-        }
-        int j = i + 1;
-        while (j < nums.length) {
-            if (nums[j] != 0) {
-                nums[i] = nums[j];
-                i++;
-            }
-            j++;
-        }
+        int i = removeElement(nums, 0) - 1;
         while (i < nums.length) {
             nums[i] = 0;
+            i++;
         }
     }
 
@@ -3635,8 +3622,61 @@ public class Solution {
         return new int[]{b, a};
     }
 
+    /**
+     * Nim 游戏
+     *
+     * @param n
+     * @return
+     */
+    public boolean canWinNim(int n) {
+        return n % 4 != 0;
+    }
 
+    /**
+     * 和为K的子数组（中等）
+     * <p>HashMap记录前缀和及其数量</p>
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int subarraySum(int[] nums, int k) {
+        int count = 0;
+        HashMap<Integer, Integer> subSums = new HashMap<>();
+        subSums.put(0, 1);
+        int res = 0;
+        for (int num : nums) {
+            count += num;
+            res += subSums.getOrDefault(count - k, 0);
+            subSums.put(count, subSums.getOrDefault(count, 0) + 1);
+        }
+        return res;
+    }
 
+    /**
+     * 航班预订统计
+     * <p>差分数组</p>
+     * <p>diff[i] 就是 nums[i] 和 nums[i-1] 之差</p>
+     *
+     * @param bookings
+     * @param n
+     * @return
+     */
+    public int[] corpFlightBookings(int[][] bookings, int n) {
+        int[] res = new int[n];
+        int[] diff = new int[n + 1];
+
+        for (int[] x : bookings) {
+            diff[x[0] - 1] += x[2];
+            diff[x[1]] -= x[2];
+        }
+        res[0] = diff[0];
+        for (int i = 1; i < n; i++) {
+            res[i] = res[i - 1] + diff[i];
+        }
+
+        return res;
+    }
 
     public static void main(String[] args) {
         Solution s = new Solution();
