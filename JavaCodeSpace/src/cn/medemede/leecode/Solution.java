@@ -3802,12 +3802,102 @@ public class Solution {
         }
     }
 
+    /**
+     * 煎饼排序
+     * <p>依次寻找大值，通过两次翻转翻到后面（类似冒泡）</p>
+     *
+     * @param arr
+     * @return
+     */
     public List<Integer> pancakeSort(int[] arr) {
+        List<Integer> res = new ArrayList<>();
+        int j = arr.length - 1;
+        while (j > 0) {
+            int i = 0;
+            int maxV = arr[i];
+            for (int k = 1; k <= j; k++) {
+                if (arr[k] > maxV) {
+                    maxV = arr[k];
+                    i = k;
+                }
+            }
+            if (i < j) {
+                // 找到目标值arr[i],将其翻转到最前面
+                pancakeFlip(arr, i);
+                res.add(i + 1);
+                // 将最前面的目标值翻转到后面的目标位置arr[j]
+                pancakeFlip(arr, j);
+                res.add(j + 1);
+            }
+            j--;
+        }
+        return res;
+    }
 
+    private void pancakeFlip(int[] arr, int k) {
+        int i = 0;
+        while (i < k) {
+            int tmp = arr[i];
+            arr[i] = arr[k];
+            arr[k] = tmp;
+            i++;
+            k--;
+        }
+    }
+
+
+    /**
+     * 字符串乘法
+     *
+     * @param num1
+     * @param num2
+     * @return
+     */
+    public String multiply(String num1, String num2) {
+        StringBuilder sb = new StringBuilder();
+        int i = num1.length() - 1;
+        int j = num2.length() - 1;
+        while (i >= 0 && num1.charAt(i) == '0') {
+            sb.append('0');
+            i--;
+        }
+        while (j >= 0 && num2.charAt(j) == '0') {
+            sb.append('0');
+            j--;
+        }
+        if (i < 0 || j < 0) {
+            return "0";
+        }
+        char[] carrying = new char[i + 2];
+        Arrays.fill(carrying, '0');
+        while (j >= 0) {
+            int pre = 0;
+            int p = i;
+            while (p >= 0) {
+                int v = (num1.charAt(p) - '0') * (num2.charAt(j) - '0');
+                v += pre;
+                v += carrying[p] - '0';
+                pre = v / 10;
+                carrying[p + 1] = (char) (v % 10 + '0');
+                p--;
+            }
+            carrying[0] = (char) (pre + '0');
+            sb.insert(0, carrying[i + 1]);
+            j--;
+        }
+        while (i > 0) {
+            sb.insert(0, carrying[i]);
+            i--;
+        }
+        if (carrying[0] > '0') {
+            sb.insert(0, carrying[0]);
+        }
+
+        return sb.toString();
     }
 
     public static void main(String[] args) {
         Solution s = new Solution();
-        System.out.println(s.findDisappearedNumbers(new int[]{4, 3, 2, 7, 8, 2, 3, 1}));
+        System.out.println(s.pancakeSort(new int[]{3, 2, 4, 1}));
     }
 }
