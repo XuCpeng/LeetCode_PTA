@@ -3730,6 +3730,82 @@ public class Solution {
         return res;
     }
 
+
+    /**
+     * 分割数组为连续子序列
+     *
+     * @param nums
+     * @return
+     */
+    public boolean isPossible(int[] nums) {
+        HashMap<Integer, Integer> need = new HashMap<>();
+        HashMap<Integer, Integer> freq = new HashMap<>();
+        for (int x : nums) {
+            freq.put(x, freq.getOrDefault(x, 0) + 1);
+        }
+
+        for (int x : nums) {
+            if (freq.getOrDefault(x, -1) == 0) {
+                continue;
+            }
+            if (need.getOrDefault(x, -1) > 0) {
+                need.put(x, need.get(x) - 1);
+                freq.put(x, freq.get(x) - 1);
+                need.put(x + 1, need.getOrDefault(x + 1, 0) + 1);
+            } else if (freq.getOrDefault(x + 1, -1) > 0 && freq.getOrDefault(x + 2, -1) > 0) {
+                freq.put(x, freq.get(x) - 1);
+                freq.put(x + 1, freq.get(x + 1) - 1);
+                freq.put(x + 1, freq.get(x + 1) - 1);
+                need.put(x + 3, need.getOrDefault(x + 3, 0) + 1);
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * 吃葡萄
+     * <p>a>2*(b+c):ceil(a/2)</p>
+     * <p>a<=2*(b+c):ceil(a/3)</p>
+     */
+    public void eatGrapes() {
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        for (int i = 0; i < n; i++) {
+            long a = in.nextLong();
+            long b = in.nextLong();
+            long c = in.nextLong();
+            long tmp;
+            if (b > a) {
+                tmp = a;
+                a = b;
+                b = tmp;
+            }
+            if (c > a) {
+                tmp = a;
+                a = c;
+                c = tmp;
+            }
+            if (c > b) {
+                tmp = b;
+                b = c;
+                c = tmp;
+            }
+            if ((a + 1) / 2 > b + c) {
+                System.out.println((a + 1) / 2);
+            } else {
+                System.out.println((a + b + c + 2) / 3);
+            }
+
+        }
+    }
+
+    public List<Integer> pancakeSort(int[] arr) {
+
+    }
+
     public static void main(String[] args) {
         Solution s = new Solution();
         System.out.println(s.findDisappearedNumbers(new int[]{4, 3, 2, 7, 8, 2, 3, 1}));
