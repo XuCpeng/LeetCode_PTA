@@ -314,6 +314,7 @@ public class Solution {
         return p;
     }
 
+
     /**
      * 是否为回文串
      *
@@ -322,6 +323,16 @@ public class Solution {
      * @param head
      * @return
      */
+    public boolean isPalindrome(ListNode head) {
+        if (head == null || head.next == null) {
+            return true;
+        }
+        p = head;
+        return getIsPalindrome(head.next);
+    }
+
+    private ListNode p;
+
     private boolean getIsPalindrome(ListNode head) {
         if (head == null) {
             return true;
@@ -332,16 +343,6 @@ public class Solution {
         } else {
             return false;
         }
-    }
-
-    private ListNode p;
-
-    public boolean isPalindrome(ListNode head) {
-        if (head == null || head.next == null) {
-            return true;
-        }
-        p = head;
-        return getIsPalindrome(head.next);
     }
 
     /**
@@ -2597,6 +2598,7 @@ public class Solution {
     /**
      * 实现 strStr()
      * <p>KMP算法</p>
+     * <p>https://wiki.jikexueyuan.com/project/kmp-algorithm/define.html
      *
      * @param haystack
      * @param needle
@@ -2608,35 +2610,46 @@ public class Solution {
         }
         char[] haystackChars = haystack.toCharArray();
         char[] needleChars = needle.toCharArray();
-        int[] pat = new int[needleChars.length];
-        int i;
-        int j;
-        for (i = 1, j = 0; i < needleChars.length; i++) {
-            while (j > 0 && needleChars[i] != needleChars[j]) {
-                j = pat[j - 1];
-            }
-            if (needleChars[i] == needleChars[j]) {
-                j++;
-            }
-            pat[i] = j;
-        }
-        for (i = 0, j = 0; i < haystackChars.length && j < needleChars.length; i++) {
-            while (j > 0 && haystackChars[i] != needleChars[j]) {
-                j = pat[j - 1];
-            }
+        int[] next = getNextVal(needleChars);
 
-            // 到达这个地方只有两种情况：1. haystackChars[i] == needleChars[j] 2. haystackChars[i] != needleChars[j],j==0
-            // haystackChars[i] == needleChars[j]时，无论j是否为0是肯定要+1的，因为该字符已经匹配上了，所以匹配下一个字符
-            // j=0时还不相等，haystackChars[i]就没有比较的必要了，所以下一个字符从头比较，j又恰好为0，所以无需处理
-            if (haystackChars[i] == needleChars[j]) {
+        int i = 0;
+        int j = 0;
+
+        while (i < haystackChars.length && j < needleChars.length) {
+            if (j == -1 || haystackChars[i] == needleChars[j]) {
+                i++;
                 j++;
+            } else {
+                j = next[j];
             }
         }
+
         if (j == needleChars.length) {
             return i - needleChars.length;
         } else {
             return -1;
         }
+    }
+
+    private int[] getNextVal(char[] needleChars) {
+        int[] next = new int[needleChars.length];
+        next[0] = -1;
+        int k = -1;
+        int j = 0;
+        while (j < needleChars.length - 1) {
+            if (k == -1 || needleChars[j] == needleChars[k]) {
+                ++j;
+                ++k;
+                if (needleChars[j] != needleChars[k]) {
+                    next[j] = k;
+                } else {
+                    next[j] = next[k];
+                }
+            } else {
+                k = next[k];
+            }
+        }
+        return next;
     }
 
     /**
@@ -3895,6 +3908,65 @@ public class Solution {
 
         return sb.toString();
     }
+
+    /**
+     * 接雨水
+     *
+     * @param height
+     * @return
+     */
+    public int trap(int[] height) {
+        int[] dp = new int[height.length];
+        int left = 0;
+        int right = 0;
+
+        // 记录左边最高挡板
+        for (int i = 0; i < height.length; i++) {
+            dp[i] = left;
+            left = Math.max(left, height[i]);
+        }
+
+        int res = 0;
+        // 通过右挡板计算水面高度
+        for (int i = height.length - 1; i >= 0; i--) {
+            int x = Math.min(dp[i], right) - height[i];
+            res += Math.max(x, 0);
+            right = Math.max(right, height[i]);
+        }
+        return res;
+    }
+
+    /**
+     * 接雨水
+     * <p>双指针</p>
+     *
+     * @param height
+     * @return
+     */
+    public int trap2(int[] height) {
+        if (height.length == 0) {
+            return 0;
+        }
+        int left = 0;
+        int right = height.length - 1;
+        int leftMax = height[left];
+        int rightMax = height[right];
+        int res = 0;
+        while (left < right) {
+            // 若右边比左边高，则水面起码会被右边的高挡板挡住，所以当前的水面高度仅取决于左边
+            if (leftMax < rightMax) {
+                res += leftMax - height[left];
+                left++;
+                leftMax = Math.max(leftMax, height[left]);
+            } else {
+                res += rightMax - height[right];
+                right--;
+                rightMax = Math.max(rightMax, height[right]);
+            }
+        }
+        return res;
+    }
+
 
     public static void main(String[] args) {
         Solution s = new Solution();
