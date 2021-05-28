@@ -2635,15 +2635,15 @@ public class Solution {
         int[] next = new int[needleChars.length];
         next[0] = -1;
         int k = -1;
-        int j = 0;
-        while (j < needleChars.length - 1) {
-            if (k == -1 || needleChars[j] == needleChars[k]) {
-                ++j;
+        int i = 0;
+        while (i < needleChars.length - 1) {
+            if (k == -1 || needleChars[i] == needleChars[k]) {
+                ++i;
                 ++k;
-                if (needleChars[j] != needleChars[k]) {
-                    next[j] = k;
+                if (needleChars[i] != needleChars[k]) {
+                    next[i] = k;
                 } else {
-                    next[j] = next[k];
+                    next[i] = next[k];
                 }
             } else {
                 k = next[k];
