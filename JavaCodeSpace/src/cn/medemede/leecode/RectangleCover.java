@@ -3,7 +3,12 @@ package cn.medemede.leecode;
 import java.util.HashSet;
 import java.util.Objects;
 
-
+/**
+ * 完美矩形
+ * <p>通过面积+顶点判断完美矩形</p>
+ * <p>大矩形面积=小矩形面积之和</p>
+ * <p>相同顶点两两抵消，最终只剩下四个大矩形的顶点</p>
+ */
 public class RectangleCover {
 
     class Point {
