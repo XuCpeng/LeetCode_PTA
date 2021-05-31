@@ -1,5 +1,7 @@
 package cn.medemede.leecode;
 
+import java.util.TreeSet;
+
 /**
  * Your ExamRoom object will be instantiated and called as such:
  * ExamRoom obj = new ExamRoom(n);
@@ -7,6 +9,8 @@ package cn.medemede.leecode;
  * obj.leave(p);
  */
 class ExamRoom {
+
+    TreeSet<int[]> pq = new TreeSet<>((a, b) -> a[1] - a[0] - (b[1] - b[0]) == 0 ? a[0] - b[0] : a[1] - a[0] - (b[1] - b[0]));
 
     public ExamRoom(int n) {
 
