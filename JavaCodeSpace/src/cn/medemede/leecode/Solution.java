@@ -3,6 +3,14 @@ package cn.medemede.leecode;
 import java.util.*;
 
 public class Solution {
+
+    /**
+     * 四个数的和
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
     public List<List<Integer>> fourSum(int[] nums, int target) {
         List<List<Integer>> result = new ArrayList<>();
         int n = nums.length;
@@ -185,6 +193,12 @@ public class Solution {
     }
 
 
+    /**
+     * 翻转链表
+     *
+     * @param head
+     * @return
+     */
     public ListNode reverseList(ListNode head) {
         if (head.next == null) {
             return head;
@@ -387,6 +401,14 @@ public class Solution {
         return true;
     }
 
+    /**
+     * 构造最大二叉树
+     *
+     * @param nums
+     * @param start
+     * @param end
+     * @return
+     */
     private TreeNode getConstructMaximumBinaryTree(int[] nums, int start, int end) {
         if (start >= end) {
             return null;
@@ -409,6 +431,9 @@ public class Solution {
         return getConstructMaximumBinaryTree(nums, 0, nums.length);
     }
 
+    /**
+     *
+     */
     Map<Integer, Integer> indexHash = new HashMap<>();
 
     private TreeNode getBuildTree(int[] preorder, int index, int inStart, int inEnd) {
@@ -433,6 +458,9 @@ public class Solution {
         return getBuildTree(preorder, 0, 0, inorder.length);
     }
 
+    /**
+     *
+     */
     HashMap<String, Boolean> subTreeMap = new HashMap<>();
     List<TreeNode> result = new LinkedList<>();
 
@@ -455,6 +483,12 @@ public class Solution {
         return result;
     }
 
+    /**
+     * @param root
+     * @param parent
+     * @param leftOrRight
+     * @param key
+     */
     private void getDeleteNode(TreeNode root, TreeNode parent, int leftOrRight, int key) {
         if (root == null) {
             return;
@@ -535,6 +569,11 @@ public class Solution {
     }
 
 
+    /**
+     * @param root
+     * @param val
+     * @return
+     */
     public TreeNode insertIntoBST(TreeNode root, int val) {
         if (root == null) {
             return new TreeNode(val);
@@ -547,6 +586,10 @@ public class Solution {
         return root;
     }
 
+    /**
+     * @param root
+     * @return
+     */
     public boolean isValidBSTFf(TreeNode root) {
         return root == null ||
                 (root.left != null ? root.left.val < root.val && isValidBSTFf(root.left)
@@ -3560,7 +3603,7 @@ public class Solution {
      * @param k
      * @return
      */
-    private int myPow(int a, int k) {
+    public int myPow(int a, int k) {
         if (k == 0) {
             return 1;
         }

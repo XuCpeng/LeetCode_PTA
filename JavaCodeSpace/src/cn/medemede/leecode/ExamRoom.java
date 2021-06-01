@@ -5,6 +5,8 @@ import java.util.Objects;
 import java.util.TreeSet;
 
 /**
+ * 考场就座
+ * <p>
  * Your ExamRoom object will be instantiated and called as such:
  * ExamRoom obj = new ExamRoom(n);
  * int param_1 = obj.seat();
@@ -70,16 +72,7 @@ class ExamRoom {
         } else {
             i = (maxLine.s + maxLine.e) / 2;
         }
-        Line left = new Line(maxLine.s, i);
-        Line right = new Line(i, maxLine.e);
-        pq.add(left);
-        pq.add(right);
-        endToLine.remove(maxLine.e);
-        startToLine.remove(maxLine.s);
-        startToLine.put(maxLine.s, left);
-        endToLine.put(i, left);
-        startToLine.put(i, right);
-        endToLine.put(maxLine.e, right);
+        addStudent(maxLine, i);
         return i;
     }
 
@@ -92,6 +85,17 @@ class ExamRoom {
         endToLine.put(right.e, tmp);
         pq.remove(left);
         pq.remove(right);
+    }
+
+    private void addStudent(Line maxLine, int i) {
+        Line left = new Line(maxLine.s, i);
+        Line right = new Line(i, maxLine.e);
+        pq.add(left);
+        pq.add(right);
+        startToLine.put(maxLine.s, left);
+        endToLine.put(i, left);
+        startToLine.put(i, right);
+        endToLine.put(maxLine.e, right);
     }
 }
 
