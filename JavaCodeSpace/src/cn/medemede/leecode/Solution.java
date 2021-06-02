@@ -4042,6 +4042,10 @@ public class Solution {
         return stack.isEmpty();
     }
 
+    public boolean isSubsequence(String s, String t) {
+
+    }
+
     public static void main(String[] args) {
         Solution s = new Solution();
     }
