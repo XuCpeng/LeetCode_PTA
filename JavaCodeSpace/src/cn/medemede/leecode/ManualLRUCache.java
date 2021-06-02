@@ -1,5 +1,8 @@
 package cn.medemede.leecode;
 
+import cn.medemede.leecode.modules.DoubleList;
+import cn.medemede.leecode.modules.DoubleNode;
+
 import java.util.HashMap;
 
 public class ManualLRUCache {

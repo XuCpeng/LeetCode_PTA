@@ -1,5 +1,10 @@
 package cn.medemede.leecode;
 
+import cn.medemede.leecode.modules.ListNode;
+import cn.medemede.leecode.modules.Node;
+import cn.medemede.leecode.modules.Result;
+import cn.medemede.leecode.modules.TreeNode;
+
 import java.util.*;
 
 public class Solution {

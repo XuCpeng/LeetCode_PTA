@@ -1,5 +1,7 @@
 package cn.medemede.leecode;
 
+import cn.medemede.leecode.modules.TreeNode;
+
 /**
  * 二叉树序列化、反序列化
  */

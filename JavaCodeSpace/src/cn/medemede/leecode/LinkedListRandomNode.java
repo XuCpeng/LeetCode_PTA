@@ -1,5 +1,7 @@
 package cn.medemede.leecode;
 
+import cn.medemede.leecode.modules.ListNode;
+
 import java.util.Random;
 
 public class LinkedListRandomNode {
