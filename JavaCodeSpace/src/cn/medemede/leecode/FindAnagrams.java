@@ -29,19 +29,28 @@ public class FindAnagrams {
         for (; right < pChars.length; right++) {
             count[sChars[right]]--;
         }
-        if (isSubStr2(count)) {
+        if (isSubStr(count)) {
             res.add(left);
         }
         while (right < sChars.length) {
             count[sChars[right]]--;
             count[sChars[left]]++;
             left++;
-            if (isSubStr2(count)) {
+            if (isSubStr(count)) {
                 res.add(left);
             }
             right++;
         }
         return res;
+    }
+
+    private boolean isSubStr(int[] count) {
+        for (int i = 96; i < 123; i++) {
+            if (count[i] != 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

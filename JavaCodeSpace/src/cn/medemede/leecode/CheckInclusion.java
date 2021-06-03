@@ -28,14 +28,14 @@ public class CheckInclusion {
         for (; right < s1Chars.length; right++) {
             count[s2Chars[right]]--;
         }
-        if (isSubStr2(count)) {
+        if (isSubStr(count)) {
             return true;
         }
         while (right < s2Chars.length) {
             count[s2Chars[right]]--;
             count[s2Chars[left]]++;
             left++;
-            if (isSubStr2(count)) {
+            if (isSubStr(count)) {
                 return true;
             }
             right++;
@@ -43,7 +43,7 @@ public class CheckInclusion {
         return false;
     }
 
-    private boolean isSubStr2(int[] count) {
+    private boolean isSubStr(int[] count) {
         for (int i = 96; i < 123; i++) {
             if (count[i] != 0) {
                 return false;
