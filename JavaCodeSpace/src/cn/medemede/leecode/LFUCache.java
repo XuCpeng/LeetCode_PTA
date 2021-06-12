@@ -50,7 +50,7 @@ public class LFUCache {
         }
     }
 
-    public void removeFriendly() {
+    public void removeMinFreq() {
         LinkedHashSet<Integer> minKeys = freqToKeys.get(minFreq);
         Iterator<Integer> it = minKeys.iterator();
         Integer key = it.next();
@@ -75,7 +75,7 @@ public class LFUCache {
             return;
         }
         if (!ketToVal.containsKey(key) && ketToVal.size() == capacity) {
-            removeFriendly();
+            removeMinFreq();
         }
         ketToVal.put(key, value);
         addFreqByKey(key);
