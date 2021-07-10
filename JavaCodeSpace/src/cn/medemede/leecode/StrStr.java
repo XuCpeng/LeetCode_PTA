@@ -6,6 +6,9 @@ public class StrStr {
      * 实现 strStr()
      * <p>KMP算法</p>
      * <p>https://wiki.jikexueyuan.com/project/kmp-algorithm/define.html
+     * <p>
+     * next 数组的求解竟然如此简单：就是找最大对称长度的前缀后缀，然后整体右移一位，初值赋为 -1
+     * （当然，你也可以直接计算某个字符对应的 next 值，就是看这个字符之前的字符串中有多大长度的相同前缀后缀）。
      *
      * @param haystack
      * @param needle
@@ -47,17 +50,14 @@ public class StrStr {
             if (k == -1 || needleChars[i] == needleChars[k]) {
                 ++i;
                 ++k;
-                if (needleChars[i] != needleChars[k]) {
-                    next[i] = k;
-                } else {
-                    next[i] = next[k];
-                }
+                next[i] = k;
             } else {
                 k = next[k];
             }
         }
         return next;
     }
+
 
 }
 
