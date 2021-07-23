@@ -43,7 +43,8 @@ public class FindLadders {
 
 
             for (int k = j; k < i; k++) {
-                if (diff(wordList.get(k), re) {
+                //May Error: need fix
+                if (diff(wordList.get(k),endWord)) {
                     return new ArrayList<>();
                 }
             }
