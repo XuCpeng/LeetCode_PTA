@@ -16,10 +16,16 @@ public class MinEatingSpeed {
     public int minEatingSpeed(int[] piles, int h) {
         int left = 1;
         int right = 1;
+        long count=0;
         for (int pile : piles) {
             if (pile > right) {
                 right = pile;
             }
+            count+=pile;
+        }
+        left=(int)(count/h);
+        if(left==0){
+            left=1;
         }
         while (left < right) {
             int mid = left + (right - left) / 2;
