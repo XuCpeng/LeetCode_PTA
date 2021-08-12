@@ -5,17 +5,16 @@ using namespace std;
 class Solution
 {
 public:
-    
     vector<vector<string>> solveNQueens(int n)
     {
         vector<int> f(n, 0);
         vector<vector<string>> res_s;
         vector<string> track;
         string raw_s(n, '.');
-        getNQueens(res_s,f, track, raw_s, n);
+        getNQueens(res_s, f, track, raw_s, n);
         return res_s;
     }
-    void getNQueens(vector<vector<string>> &res_s,vector<int> &f, vector<string> &track, string &raw_s, int n)
+    void getNQueens(vector<vector<string>> &res_s, vector<int> &f, vector<string> &track, string &raw_s, int n)
     {
         if (n == track.size())
         {

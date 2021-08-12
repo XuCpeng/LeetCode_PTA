@@ -14,24 +14,29 @@ typedef PtrToLNode List;
 Position Find(List L, ElementType X)
 {
     PtrToLNode p = L;
-    while (p != NULL && p->Data != X){
+    while (p != NULL && p->Data != X)
+    {
         p = p->Next;
     }
-        if(p!=NULL&&p->Data==X){
-            return p;
-        }else{
-            return ERROR;
-        }
+    if (p != NULL && p->Data == X)
+    {
+        return p;
+    }
+    else
+    {
+        return ERROR;
+    }
 }
 List Insert(List L, ElementType X, Position P)
 {
-    if (L == NULL&&P!=NULL)
+    if (L == NULL && P != NULL)
     {
         printf("%s", "Wrong Position for Insertion");
-            return ERROR;
+        return ERROR;
     }
 
-    if(P==L){
+    if (P == L)
+    {
         Position x = (Position)malloc(sizeof(struct LNode));
         x->Data = X;
         x->Next = L;
@@ -66,9 +71,10 @@ List Delete(List L, Position P)
         return ERROR;
     }
 
-    if(P==L){
+    if (P == L)
+    {
         PtrToLNode p = L->Next;
-        L->Next=NULL;
+        L->Next = NULL;
         free(L);
         return p;
     }
@@ -138,6 +144,6 @@ int main()
     for (P = L; P; P = P->Next)
         printf("%d ", P->Data);
 
-        system("pause");
+    system("pause");
     return 0;
 }

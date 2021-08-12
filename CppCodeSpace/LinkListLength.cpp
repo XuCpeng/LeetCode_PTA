@@ -3,7 +3,8 @@
 
 typedef int ElementType;
 typedef struct LNode *PtrToLNode;
-struct LNode {
+struct LNode
+{
     ElementType Data;
     PtrToLNode Next;
 };
@@ -11,7 +12,7 @@ typedef PtrToLNode List;
 
 List Read(); /* 细节在此不表 */
 
-int Length( List L );
+int Length(List L);
 
 int main()
 {
@@ -22,13 +23,14 @@ int main()
 
 /* 你的代码将被嵌在这里 */
 
-
-int Length( List L ){
-    int l=0;
-    PtrToLNode p=L;
-    while(p!=NULL){
+int Length(List L)
+{
+    int l = 0;
+    PtrToLNode p = L;
+    while (p != NULL)
+    {
         l++;
-        p=p->Next;
+        p = p->Next;
     }
     return l;
 }

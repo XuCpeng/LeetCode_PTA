@@ -10,7 +10,7 @@ public:
         vector<vector<int>> res;
         vector<int> track;
         vector<int> f(nums.size(), 0);
-        getPermute(res, f,nums, track);
+        getPermute(res, f, nums, track);
         return res;
     }
 
@@ -21,7 +21,7 @@ public:
             res.push_back(track);
             return;
         }
-        
+
         for (int i = 0; i < nums.size(); i++)
         {
             if (f[i])
@@ -30,7 +30,7 @@ public:
             }
             track.push_back(nums[i]);
             f[i] = 1;
-            getPermute(res,f, nums, track);
+            getPermute(res, f, nums, track);
             f[i] = 0;
             track.pop_back();
         }

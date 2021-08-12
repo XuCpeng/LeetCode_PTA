@@ -1,7 +1,5 @@
 package cn.medemede.leecode;
 
-import java.util.Arrays;
-
 public class LongestPalindromeSubseq {
 
     /**
@@ -15,9 +13,6 @@ public class LongestPalindromeSubseq {
 
     public int longestPalindromeSubseq(String s) {
         memo = new int[s.length()][s.length()];
-        for (int[] x : memo) {
-            Arrays.fill(x, -1);
-        }
         return getLongestPalindromeSubseq(s.toCharArray(), 0, s.length() - 1);
     }
 
@@ -28,7 +23,7 @@ public class LongestPalindromeSubseq {
         if (i == j) {
             return 1;
         }
-        if (memo[i][j] != -1) {
+        if (memo[i][j] != 0) {
             return memo[i][j];
         }
         if (s[i] == s[j]) {

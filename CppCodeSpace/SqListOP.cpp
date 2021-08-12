@@ -77,7 +77,6 @@ Position Find(List L, ElementType X)
     return ERROR;
 }
 
-
 bool Insert(List L, ElementType X, Position P)
 {
     if (L->Last == MAXSIZE - 1)

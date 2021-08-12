@@ -5,26 +5,34 @@
 #include "iostream"
 using namespace std;
 
-template<class DataType>
+template <class DataType>
 struct Node
 {
 	DataType data;
-	Node<DataType> *next; 
+	Node<DataType> *next;
 };
-template<class DataType>
-class LinkQueue {
+template <class DataType>
+class LinkQueue
+{
 public:
 	LinkQueue();
 	~LinkQueue();
 	void EnQueue(DataType x);
 	DataType DeQueue();
 	DataType GetQueue();
-	int Empty() { if (front == rear) return 1; else return 0; }
+	int Empty()
+	{
+		if (front == rear)
+			return 1;
+		else
+			return 0;
+	}
+
 private:
 	Node<DataType> *front, *rear;
 };
 
-template<class DataType>
+template <class DataType>
 LinkQueue<DataType>::LinkQueue()
 {
 	Node<DataType> *s = new Node<DataType>;
@@ -32,17 +40,18 @@ LinkQueue<DataType>::LinkQueue()
 	front = rear = s;
 }
 
-template<class DataType>
+template <class DataType>
 LinkQueue<DataType>::~LinkQueue()
 {
-	while (front != NULL) {
+	while (front != NULL)
+	{
 		Node<DataType> *p = front;
 		front = front->next;
 		delete p;
 	}
 }
 
-template<class DataType>
+template <class DataType>
 void LinkQueue<DataType>::EnQueue(DataType x)
 {
 	Node<DataType> *s = new Node<DataType>;
@@ -51,7 +60,7 @@ void LinkQueue<DataType>::EnQueue(DataType x)
 	rear = s;
 }
 
-template<class DataType>
+template <class DataType>
 DataType LinkQueue<DataType>::DeQueue()
 {
 	if (front == rear)
@@ -65,24 +74,25 @@ DataType LinkQueue<DataType>::DeQueue()
 	return x;
 }
 
-template<class DataType>
+template <class DataType>
 DataType LinkQueue<DataType>::GetQueue()
 {
 	if (front->next == NULL)
 		cout << "队列为空" << endl;
-	else {
+	else
+	{
 		DataType x = front->next->data;
 		return x;
 	}
 	return 0;
 }
 
-
 int main()
 {
 	LinkQueue<int> s;
-	int a[5] = { 5,9,6,7,3 };
-	for (int i = 0; i < 5; i++) {
+	int a[5] = {5, 9, 6, 7, 3};
+	for (int i = 0; i < 5; i++)
+	{
 		s.EnQueue(a[i]);
 	}
 	cout << "队头元素：" << s.GetQueue() << endl;

@@ -5,26 +5,30 @@
 
 typedef int ElementType;
 typedef struct Node *PtrToNode;
-struct Node {
+struct Node
+{
     ElementType Data;
-    PtrToNode   Next;
+    PtrToNode Next;
 };
 typedef PtrToNode List;
 
-List Reverse(List L){
-    List p,q,w;
-    p=L;
-    q=p;
-    if (p!=NULL&&p->Next!=NULL) {
-        q=p->Next;
-        p->Next=NULL;
-        while (q->Next != NULL) {
+List Reverse(List L)
+{
+    List p, q, w;
+    p = L;
+    q = p;
+    if (p != NULL && p->Next != NULL)
+    {
+        q = p->Next;
+        p->Next = NULL;
+        while (q->Next != NULL)
+        {
             w = q->Next;
             q->Next = p;
             p = q;
             q = w;
         }
-        q->Next=p;
+        q->Next = p;
     }
     return q;
 }

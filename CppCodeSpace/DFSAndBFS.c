@@ -8,7 +8,7 @@ void DFS(int a[10][10], int v, int n, int flag[])
         flag[v] = 1;
         for (int i = 0; i < n; i++)
         {
-            if (a[v][i]==1)
+            if (a[v][i] == 1)
             {
                 DFS(a, i, n, flag);
             }
@@ -16,21 +16,24 @@ void DFS(int a[10][10], int v, int n, int flag[])
     }
 }
 
-void BFS(int a[10][10],int v,int n,int flag[]){
-    int queue[11]={0},h=0,t=0;
-    queue[0]=v;
-    flag[v]=1;
-    t=1;
-    while(h!=t){
-        int p=queue[h];
-        h=(h+1)%11;
-        printf("%d ",p);
-        for(int i = 0; i < n; i++)
+void BFS(int a[10][10], int v, int n, int flag[])
+{
+    int queue[11] = {0}, h = 0, t = 0;
+    queue[0] = v;
+    flag[v] = 1;
+    t = 1;
+    while (h != t)
+    {
+        int p = queue[h];
+        h = (h + 1) % 11;
+        printf("%d ", p);
+        for (int i = 0; i < n; i++)
         {
-            if(a[p][i]==1&&(flag[i]!=1)){
-                queue[t]=i;
-                flag[i]=1;
-                t=(t+1)%11;
+            if (a[p][i] == 1 && (flag[i] != 1))
+            {
+                queue[t] = i;
+                flag[i] = 1;
+                t = (t + 1) % 11;
             }
         }
     }
@@ -62,7 +65,7 @@ int main(int argc, char const *argv[])
         }
     }
 
-    int flag2[10]={0};
+    int flag2[10] = {0};
     for (int i = 0; i < n; i++)
     {
 

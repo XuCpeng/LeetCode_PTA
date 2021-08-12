@@ -4,12 +4,12 @@
 typedef char ElementType;
 typedef struct TNode *Position;
 typedef Position BinTree;
-struct TNode{
+struct TNode
+{
     ElementType Data;
     BinTree Left;
     BinTree Right;
 };
-
 
 void InorderTraversal(BinTree BT)
 {

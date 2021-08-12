@@ -60,7 +60,6 @@ int main()
 	printf("%d ", Pop(S, 3));
 	printf("%d ", Pop(S, 4));
 
-
 	return 0;
 }
 
@@ -68,7 +67,7 @@ int main()
 Stack CreateStack(int MaxSize)
 {
 	Stack s = (Stack)malloc(sizeof(struct SNode));
-	s->Data = (ElementType*)malloc(sizeof(ElementType)*MaxSize);
+	s->Data = (ElementType *)malloc(sizeof(ElementType) * MaxSize);
 	s->MaxSize = MaxSize;
 	s->Top1 = -1;
 	s->Top2 = MaxSize;
@@ -77,7 +76,7 @@ Stack CreateStack(int MaxSize)
 
 bool Push(Stack S, ElementType X, int Tag)
 {
-	if (S == NULL || S->Top1+1==S->Top2)
+	if (S == NULL || S->Top1 + 1 == S->Top2)
 	{
 		printf("%s", "Stack Full\n");
 		return false;
@@ -116,15 +115,15 @@ ElementType Pop(Stack S, int Tag)
 			return ERROR;
 		}
 		S->Top1 = S->Top1 - 1;
-		return S->Data[S->Top1+1];
+		return S->Data[S->Top1 + 1];
 	case 2:
-		if (S->Top2 > S->MaxSize-1)
+		if (S->Top2 > S->MaxSize - 1)
 		{
 			printf("Stack %d Empty\n", Tag);
 			return ERROR;
 		}
 		S->Top2 = S->Top2 + 1;
-		return S->Data[S->Top2-1];
+		return S->Data[S->Top2 - 1];
 	default:
 		break;
 	}

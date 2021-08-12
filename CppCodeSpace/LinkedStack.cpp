@@ -5,14 +5,14 @@
 #include "iostream"
 using namespace std;
 
-template<class DataType>
+template <class DataType>
 struct Node
 {
 	DataType data;
 	Node<DataType> *next;
 };
 
-template<class DataType>
+template <class DataType>
 class LinkStack
 {
 public:
@@ -20,32 +20,35 @@ public:
 	~LinkStack();
 	void Push(DataType x);
 	DataType Pop();
-	DataType GetTop() {
+	DataType GetTop()
+	{
 		if (top != NULL)
 			return top->data;
 	}
-	int Empty() {
+	int Empty()
+	{
 		if (top == NULL)
 			return 1;
 		else
 			return 0;
 	}
+
 private:
 	Node<DataType> *top;
 };
 
-
-template<class DataType>
+template <class DataType>
 LinkStack<DataType>::~LinkStack()
 {
-	while(top != NULL) {
+	while (top != NULL)
+	{
 		Node<DataType> *p = top;
 		top = top->next;
 		delete p;
 	}
 }
 
-template<class DataType>
+template <class DataType>
 void LinkStack<DataType>::Push(DataType x)
 {
 	Node<DataType> *s = new Node<DataType>;
@@ -54,7 +57,7 @@ void LinkStack<DataType>::Push(DataType x)
 	top = s;
 }
 
-template<class DataType>
+template <class DataType>
 DataType LinkStack<DataType>::Pop()
 {
 	if (top == NULL)
@@ -69,8 +72,9 @@ DataType LinkStack<DataType>::Pop()
 int main()
 {
 	LinkStack<int> s;
-	int a[11] = { 5,3,5,89,9,4,6,4,4,654,56 };
-	for (int i = 0; i < 11; i++) {
+	int a[11] = {5, 3, 5, 89, 9, 4, 6, 4, 4, 654, 56};
+	for (int i = 0; i < 11; i++)
+	{
 		s.Push(a[i]);
 	}
 	cout << "栈顶元素：" << s.GetTop() << endl;

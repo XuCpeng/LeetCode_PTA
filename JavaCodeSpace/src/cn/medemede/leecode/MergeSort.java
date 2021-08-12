@@ -11,6 +11,7 @@ public class MergeSort {
     }
 
     private void mergeSort(int[] nums, int low, int high) {
+
         if (low >= high) {
             return;
         }
@@ -55,4 +56,5 @@ public class MergeSort {
         mergeSort.sort(nums);
         System.out.println(Arrays.toString(nums));
     }
+
 }

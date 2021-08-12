@@ -3,7 +3,7 @@ package cn.medemede.leecode;
 import java.util.HashMap;
 
 /**
- * 大餐计数
+     * 大餐计数
  */
 public class CountPairs {
     public int countPairs(int[] deliciousness) {

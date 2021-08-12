@@ -6,22 +6,29 @@
 using namespace std;
 
 const int QueueSize = 10;
-template<class DataType>
-class CircularQue {
+template <class DataType>
+class CircularQue
+{
 public:
 	CircularQue() { front = rear = QueueSize - 1; }
-	~CircularQue(){}
+	~CircularQue() {}
 	void EnQueue(DataType x);
 	DataType DeQueue();
 	DataType GetQueue();
-	int Empty() { if (front == rear) return 1; else return 0; }
+	int Empty()
+	{
+		if (front == rear)
+			return 1;
+		else
+			return 0;
+	}
+
 private:
 	DataType data[QueueSize];
 	int front, rear;
-
 };
 
-template<class DataType>
+template <class DataType>
 void CircularQue<DataType>::EnQueue(DataType x)
 {
 	if ((rear + 1) % QueueSize == front)
@@ -30,7 +37,7 @@ void CircularQue<DataType>::EnQueue(DataType x)
 	data[rear] = x;
 }
 
-template<class DataType>
+template <class DataType>
 DataType CircularQue<DataType>::DeQueue()
 {
 	if (rear == front)
@@ -39,7 +46,7 @@ DataType CircularQue<DataType>::DeQueue()
 	return data[front];
 }
 
-template<class DataType>
+template <class DataType>
 DataType CircularQue<DataType>::GetQueue()
 {
 	if (rear == front)
@@ -51,8 +58,9 @@ DataType CircularQue<DataType>::GetQueue()
 int main()
 {
 	CircularQue<int> s;
-	int a[5] = { 5,9,6,7,3 };
-	for (int i = 0; i < 5; i++) {
+	int a[5] = {5, 9, 6, 7, 3};
+	for (int i = 0; i < 5; i++)
+	{
 		s.EnQueue(a[i]);
 	}
 	cout << "队头元素：" << s.GetQueue() << endl;

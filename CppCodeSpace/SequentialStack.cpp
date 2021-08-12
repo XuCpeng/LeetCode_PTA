@@ -7,12 +7,12 @@ using namespace std;
 
 const int StackSize = 10;
 
-template<class DataType>
+template <class DataType>
 class SeqStack
 {
 public:
 	SeqStack() { top = -1; }
-	~SeqStack() {};
+	~SeqStack(){};
 
 	void Push(DataType x);
 	DataType Pop();
@@ -24,16 +24,16 @@ private:
 	int top;
 };
 
-template<class DataType>
+template <class DataType>
 void SeqStack<DataType>::Push(DataType x)
 {
 	if (top == StackSize - 1)
-		cout<< "上溢"<<endl;
+		cout << "上溢" << endl;
 	else
-	data[++top] = x;
+		data[++top] = x;
 }
 
-template<class DataType>
+template <class DataType>
 DataType SeqStack<DataType>::Pop()
 {
 	if (top == -1)
@@ -42,7 +42,7 @@ DataType SeqStack<DataType>::Pop()
 	return x;
 }
 
-template<class DataType>
+template <class DataType>
 DataType SeqStack<DataType>::GetTop()
 {
 	if (top == -1)
@@ -50,7 +50,7 @@ DataType SeqStack<DataType>::GetTop()
 	return data[top];
 }
 
-template<class DataType>
+template <class DataType>
 int SeqStack<DataType>::Empty()
 {
 	if (top == -1)
@@ -59,17 +59,17 @@ int SeqStack<DataType>::Empty()
 		return 0;
 }
 
-
 int main()
 {
 	SeqStack<int> s;
-	int a[11] = { 5,3,5,89,9,4,6,4,4,654,56 };
-	for (int i = 0; i < 11; i++) {
+	int a[11] = {5, 3, 5, 89, 9, 4, 6, 4, 4, 654, 56};
+	for (int i = 0; i < 11; i++)
+	{
 		s.Push(a[i]);
 	}
-	cout << "栈顶元素："<< s.GetTop()<<endl;
-	cout << "出栈：" << s.Pop()<<endl;
-	cout << "栈顶元素："<<s.GetTop()<<endl;
+	cout << "栈顶元素：" << s.GetTop() << endl;
+	cout << "出栈：" << s.Pop() << endl;
+	cout << "栈顶元素：" << s.GetTop() << endl;
 	cout << "是否为空？ " << s.Empty() << endl;
 
 	system("pause");
