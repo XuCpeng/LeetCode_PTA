@@ -10,6 +10,32 @@ public class LengthOfLongestSubstring {
      * @return
      */
     public int lengthOfLongestSubstring(String s) {
+        if (s == null) {
+            return 0;
+        }
+        char[] sChars = s.toCharArray();
+        boolean[] memo = new boolean[128];
+        int maxLen = 0;
+        int left = 0;
+        int right = 0;
+        while (right < sChars.length) {
+            if (!memo[sChars[right]]) {
+                memo[sChars[right]] = true;
+            } else {
+                maxLen = Math.max(maxLen, right - left);
+                while (sChars[left] != sChars[right]) {
+                    memo[sChars[left]] = false;
+                    left++;
+                }
+                left++;
+            }
+            right++;
+        }
+        maxLen = Math.max(maxLen, right - left);
+        return maxLen;
+    }
+
+    public int lengthOfLongestSubstring2(String s) {
         int result = 0;
         int left = 0;
         int right = 0;

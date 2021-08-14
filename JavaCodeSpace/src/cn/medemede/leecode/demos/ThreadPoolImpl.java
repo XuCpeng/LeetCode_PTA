@@ -3,7 +3,7 @@ package cn.medemede.leecode.demos;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class ThreadPoolImpl<Job extends Runnable> implements ThreadPool<Job> {
+public class ThreadPoolImpl implements ThreadPool {
     /**
      * 工作者线程的最大数量
      */
@@ -22,12 +22,12 @@ public class ThreadPoolImpl<Job extends Runnable> implements ThreadPool<Job> {
     /**
      * 维护一个工作列表,里面加入客户端发起的工作
      */
-    private final LinkedList<Job> jobs = new LinkedList<>();
+    private final LinkedList<Runnable> jobs = new LinkedList<>();
 
     /**
      * 工作者线程的列表
      */
-    private final List<Worker> workers = Collections.synchronizedList(new ArrayList<Worker>());
+    private final List<Worker> workers = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * 工作者线程的数量
@@ -45,7 +45,7 @@ public class ThreadPoolImpl<Job extends Runnable> implements ThreadPool<Job> {
         @Override
         public void run() {
             while (running) {
-                Job job = null;
+                Runnable job = null;
                 //线程的等待/通知机制
                 synchronized (jobs) {
                     if (jobs.isEmpty()) {
@@ -76,10 +76,15 @@ public class ThreadPoolImpl<Job extends Runnable> implements ThreadPool<Job> {
         }
     }
 
+    public ThreadPoolImpl() {
+        this.workerNum = DEFAULT_WORKER_NUMBERS;
+        initializeWorkers(this.workerNum);
+    }
 
     public ThreadPoolImpl(int num) {
-        this.workerNum = Math.min(num, MAX_WORKER_NUMBERS);
-        initializeWorkers(num);
+
+        this.workerNum = Math.max(Math.min(num, MAX_WORKER_NUMBERS), MIN_WORKER_NUMBERS);
+        initializeWorkers(this.workerNum);
     }
 
     private void initializeWorkers(int num) {
@@ -91,13 +96,20 @@ public class ThreadPoolImpl<Job extends Runnable> implements ThreadPool<Job> {
     }
 
     @Override
-    public void execute(Job job) {
+    public void execute(Runnable job) {
         if (job == null) {
             throw new NullPointerException();
         }
         synchronized (jobs) {
             jobs.addLast(job);
             jobs.notify();
+        }
+    }
+
+    @Override
+    public void shutDown() {
+        for (Worker worker : workers) {
+            worker.shutdown();
         }
     }
 
@@ -126,13 +138,6 @@ public class ThreadPoolImpl<Job extends Runnable> implements ThreadPool<Job> {
                 iterator.remove();
                 num--;
             }
-        }
-    }
-
-    @Override
-    public void shutDown() {
-        for (Worker worker : workers) {
-            worker.shutdown();
         }
     }
 

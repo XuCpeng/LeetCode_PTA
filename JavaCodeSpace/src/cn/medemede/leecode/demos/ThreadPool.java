@@ -1,7 +1,7 @@
 package cn.medemede.leecode.demos;
 
-public interface ThreadPool<Job extends Runnable> {
-    void execute(Job job);
+public interface ThreadPool {
+    void execute(Runnable job);
 
     void addWorksNum(int num);
 

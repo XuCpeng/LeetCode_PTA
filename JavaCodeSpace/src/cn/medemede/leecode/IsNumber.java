@@ -1,7 +1,7 @@
 package cn.medemede.leecode;
 
 /**
- * 有效数字
+ * 有效数字 self
  */
 public class IsNumber {
     int i;

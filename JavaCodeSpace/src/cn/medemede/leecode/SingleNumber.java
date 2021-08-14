@@ -31,10 +31,7 @@ public class SingleNumber {
             count ^= x;
         }
         int i = 1;
-        for (int j = 0; j < 32; j++) {
-            if ((count & i) > 0) {
-                break;
-            }
+        while ((count & i) == 0) {
             i = i << 1;
         }
         int res1 = 0;

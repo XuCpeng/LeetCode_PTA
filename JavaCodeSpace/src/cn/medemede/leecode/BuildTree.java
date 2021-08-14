@@ -8,28 +8,25 @@ import java.util.Map;
 public class BuildTree {
 
     /**
-     *
+     * 前序遍历+中序遍历，构建二叉树
      */
-    Map<Integer, Integer> indexHash = new HashMap<>();
+    Map<Integer, Integer> inOrderIndexMap = new HashMap<>();
 
-    private TreeNode getBuildTree(int[] preorder, int index, int inStart, int inEnd) {
-        if (inStart >= inEnd) {
+    private TreeNode getBuildTree(int[] preorder, int preOrderIndex, int inOrderStart, int inOrderEnd) {
+        if (inOrderStart >= inOrderEnd) {
             return null;
         }
-        int val = preorder[index];
+        int val = preorder[preOrderIndex];
         TreeNode root = new TreeNode(val);
-        int i = indexHash.get(val);
-        root.left = getBuildTree(preorder, index + 1, inStart, i);
-        root.right = getBuildTree(preorder, index + (i - inStart) + 1, i + 1, inEnd);
+        int inOrderIndex = inOrderIndexMap.get(val);
+        root.left = getBuildTree(preorder, preOrderIndex + 1, inOrderStart, inOrderIndex);
+        root.right = getBuildTree(preorder, preOrderIndex + (inOrderIndex - inOrderStart) + 1, inOrderIndex + 1, inOrderEnd);
         return root;
     }
 
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        if (preorder.length == 0) {
-            return null;
-        }
         for (int i = 0; i < inorder.length; i++) {
-            indexHash.put(inorder[i], i);
+            inOrderIndexMap.put(inorder[i], i);
         }
         return getBuildTree(preorder, 0, 0, inorder.length);
     }
