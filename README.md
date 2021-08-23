@@ -1,25 +1,26 @@
 # LeetCode PTA
 
 ```bash
-[2021/08/15] 路漫漫其修远兮
+[2021/08/23] 路漫漫其修远兮
 (base) ➜  LeetCode_PTA git:(master) ✗ cloc ./JavaCodeSpace ./CppCodeSpace ./PythonCodeSpace
-     313 text files.
-     311 unique files.                                          
-     117 files ignored.
+     326 text files.
+     324 unique files.                                          
+      94 files ignored.
 
-github.com/AlDanial/cloc v 1.90  T=1.26 s (210.8 files/s, 14578.2 lines/s)
+github.com/AlDanial/cloc v 1.90  T=1.64 s (175.0 files/s, 11661.4 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                           206           1572           2389          10698
+Java                           228           1646           2475          11329
 C++                             28            221            122           2290
-XML                             23              0              0            661
+XML                             23              0              0            666
 C                                2             21              7            185
 JSON                             4              0              0             77
 Python                           2              7             11             67
 -------------------------------------------------------------------------------
-SUM:                           265           1821           2529          13978
+SUM:                           287           1895           2615          14614
 -------------------------------------------------------------------------------
+
 ```
 
 **为LeetCode和PTA刷题而创建，若有一些简短的算法也会放进来**
