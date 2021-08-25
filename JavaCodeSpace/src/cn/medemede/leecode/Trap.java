@@ -37,24 +37,20 @@ public class Trap {
      * @return
      */
     public int trap2(int[] height) {
-        if (height.length == 0) {
-            return 0;
-        }
-        int left = 0;
-        int right = height.length - 1;
-        int leftMax = height[left];
-        int rightMax = height[right];
         int res = 0;
+        int left = 0;
+        int leftMax = 0;
+        int rightMax = 0;
+        int right = height.length - 1;
         while (left < right) {
-            // 若右边比左边高，则水面起码会被右边的高挡板挡住，所以当前的水面高度仅取决于左边
+            leftMax = Math.max(leftMax, height[left]);
+            rightMax = Math.max(rightMax, height[right]);
             if (leftMax < rightMax) {
                 res += leftMax - height[left];
                 left++;
-                leftMax = Math.max(leftMax, height[left]);
             } else {
                 res += rightMax - height[right];
                 right--;
-                rightMax = Math.max(rightMax, height[right]);
             }
         }
         return res;
