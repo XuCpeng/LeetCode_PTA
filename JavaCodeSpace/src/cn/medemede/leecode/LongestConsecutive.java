@@ -1,5 +1,7 @@
 package cn.medemede.leecode;
 
+import java.util.HashSet;
+
 public class LongestConsecutive {
     public int longestConsecutive(int[] nums) {
         HashSet<Integer> vals=new HashSet<>();
