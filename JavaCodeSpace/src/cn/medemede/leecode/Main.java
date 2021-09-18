@@ -1,114 +1,107 @@
 package cn.medemede.leecode;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        int T = Integer.parseInt(in.nextLine());
-        for (int i = 0; i < T; i++) {
-            String[] nandm = in.nextLine().split(" ");
-            int n = Integer.parseInt(nandm[0]);
-            int m = Integer.parseInt(nandm[1]);
-            char[][] board = new char[n][m];
-            boolean[][] visited = new boolean[n][m];
-            int keys = 0;
-            int startX = -1;
-            int startY = -1;
-
-            for (int j = 0; j < n; j++) {
-                char[] row = in.nextLine().toCharArray();
-                for (int k = 0; k < m; k++) {
-                    board[j][k] = row[k];
-                    if (row[k] == 'S') {
-                        startX = j;
-                        startY = k;
-                    }
-
-                    if (row[k] == 'K') {
-                        keys++;
-                    }
+        String[] firstLine = in.nextLine().split(" ");
+        int h = Integer.parseInt(firstLine[0]);
+        int w = Integer.parseInt(firstLine[1]);
+        int t = Integer.parseInt(firstLine[2]);
+        int sX = -1;
+        int sY = -1;
+        char[][] board = new char[h][w];
+        boolean[][] visited = new boolean[h][w];
+        for (int i = 0; i < h; i++) {
+            char[] row = in.nextLine().toCharArray();
+            for (int j = 0; j < w; j++) {
+                board[i][j] = row[j];
+                if (row[j] == 'S') {
+                    sX = i;
+                    sY = j;
                 }
             }
-            int res = 0;
-
-            int step = 0;
-            LinkedList<int[]> queue = new LinkedList<>();
-            queue.addLast(new int[]{startX, startY});
-            visited[startX][startY] = true;
-
-
-            while (!queue.isEmpty() && keys != 0) {
-                int tmpN = queue.size();
-                for (int q = 0; q < tmpN; q++) {
-                    int[] index = queue.pollFirst();
-                    char c = board[index[0]][index[1]];
-                    if (c == 'K') {
-                        keys--;
-                        res += step;
-                        step = -1;
-                        board[index[0]][index[1]] = 'O';
-                        queue.clear();
-                        queue.addLast(index);
-                        for (int j = 0; j < n; j++) {
-                            Arrays.fill(visited[j], false);
-                        }
-                        visited[index[0]][index[1]] = true;
-                        break;
-                    }
-                    if (index[0] - 1 >= 0 && !visited[index[0] - 1][index[1]] && board[index[0] - 1][index[1]] != 'X') {
-                        queue.addLast(new int[]{index[0] - 1, index[1]});
-                    }
-                    if (index[1] - 1 >= 0 && !visited[index[0]][index[1] - 1] && board[index[0]][index[1] - 1] != 'X') {
-                        queue.addLast(new int[]{index[0], index[1] - 1});
-                    }
-                    if (index[0] + 1 < n && !visited[index[0] + 1][index[1]] && board[index[0] + 1][index[1]] != 'X') {
-                        queue.addLast(new int[]{index[0] + 1, index[1]});
-                    }
-                    if (index[1] + 1 < m && !visited[index[0]][index[1] + 1] && board[index[0]][index[1] + 1] != 'X') {
-                        queue.addLast(new int[]{index[0], index[1] + 1});
-                    }
-                }
-                step++;
-            }
-            if (keys != 0) {
-                System.out.println(-1);
-                break;
-            }
-            char c = 'X';
-            while (!queue.isEmpty()) {
-                int tmpN = queue.size();
-                for (int q = 0; q < tmpN; q++) {
-                    int[] index = queue.pollFirst();
-                    c = board[index[0]][index[1]];
-                    if (c == 'E') {
-                        res += step;
-                        System.out.println(res);
-                        break;
-                    }
-                    if (index[0] - 1 >= 0 && !visited[index[0] - 1][index[1]] && board[index[0] - 1][index[1]] != 'X') {
-                        queue.addLast(new int[]{index[0] - 1, index[1]});
-                    }
-                    if (index[1] - 1 >= 0 && !visited[index[0]][index[1] - 1] && board[index[0]][index[1] - 1] != 'X') {
-                        queue.addLast(new int[]{index[0], index[1] - 1});
-                    }
-                    if (index[0] + 1 < n && !visited[index[0] + 1][index[1]] && board[index[0] + 1][index[1]] != 'X') {
-                        queue.addLast(new int[]{index[0] + 1, index[1]});
-                    }
-                    if (index[1] + 1 < m && !visited[index[0]][index[1] + 1] && board[index[0]][index[1] + 1] != 'X') {
-                        queue.addLast(new int[]{index[0], index[1] + 1});
-                    }
-                }
-                if (c == 'E') {
+        }
+        HashMap<int[], int[]> prev = new HashMap<>();
+        LinkedList<int[]> queue = new LinkedList<>();
+        int[] start = new int[]{sX, sY};
+        queue.addLast(start);
+        visited[sX][sY] = true;
+        int[] index = start;
+        while (!queue.isEmpty()) {
+            int n = queue.size();
+            for (int i = 0; i < n; i++) {
+                index = queue.pollFirst();
+                if (board[index[0]][index[1]] == 'G') {
                     break;
                 }
-                step++;
+                LinkedList<int[]> tmpIndexList = new LinkedList<>();
+                if (index[0] - 1 >= 0 && !visited[index[0] - 1][index[1]]) {
+                    int[] tmp = new int[]{index[0] - 1, index[1]};
+                    prev.put(tmp, index);
+                    visited[index[0] - 1][index[1]] = true;
+                    if (board[tmp[0]][tmp[1]] == '.') {
+                        tmpIndexList.addFirst(tmp);
+                    } else {
+                        tmpIndexList.addLast(tmp);
+                    }
+                }
+                if (index[1] - 1 >= 0 && !visited[index[0]][index[1] - 1]) {
+                    int[] tmp = new int[]{index[0], index[1] - 1};
+                    prev.put(tmp, index);
+                    visited[index[0]][index[1] - 1] = true;
+                    if (board[tmp[0]][tmp[1]] == '.') {
+                        tmpIndexList.addFirst(tmp);
+                    } else {
+                        tmpIndexList.addLast(tmp);
+                    }
+                }
+                if (index[0] + 1 < h && !visited[index[0] + 1][index[1]]) {
+                    int[] tmp = new int[]{index[0] + 1, index[1]};
+                    prev.put(tmp, index);
+                    visited[index[0] + 1][index[1]] = true;
+                    if (board[tmp[0]][tmp[1]] == '.') {
+                        tmpIndexList.addFirst(tmp);
+                    } else {
+                        tmpIndexList.addLast(tmp);
+                    }
+                }
+                if (index[1] + 1 < w && !visited[index[0]][index[1] + 1]) {
+                    int[] tmp = new int[]{index[0], index[1] + 1};
+                    prev.put(tmp, index);
+                    visited[index[0]][index[1] + 1] = true;
+                    if (board[tmp[0]][tmp[1]] == '.') {
+                        tmpIndexList.addFirst(tmp);
+                    } else {
+                        tmpIndexList.addLast(tmp);
+                    }
+                }
+                for (int[] tmpIndex : tmpIndexList) {
+                    queue.addLast(tmpIndex);
+                }
             }
-            if (c != 'E') {
-                System.out.println(-1);
+            if (board[index[0]][index[1]] == 'G') {
+                break;
             }
+        }
+        int steps = 0;
+        int countX = 0;
+        while (index != start) {
+            char c = board[index[0]][index[1]];
+            if (c == '#') {
+                countX++;
+            } else {
+                steps++;
+            }
+            index = prev.get(index);
+        }
+        if (countX == 0) {
+            System.out.println(-1);
+        } else {
+            System.out.println((t - steps) / countX);
         }
     }
 }
